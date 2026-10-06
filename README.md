@@ -1,21 +1,32 @@
-# React + TypeScript + Vite + shadcn/ui
+# svoboda.page
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+Personal presentation site of Stanislav Svoboda. Built with TanStack Start
+(React + TypeScript on Vite) and deployed to Cloudflare Workers; see
+[`docs/adr`](docs/adr) for why.
 
-## Adding components
+## How to run locally
 
-To add components to your app, run the following command:
+You need Node.js 24.
 
 ```bash
-npx shadcn@latest add button
+npm install
+npm run dev        # start the dev server; open the URL it prints
 ```
 
-This will place the ui components in the `src/components` directory.
+Other commands:
 
-## Using components
+```bash
+npm test           # run the Vitest tests once
+npm run typecheck  # check types
+npm run lint       # run ESLint
+npm run build      # production build, prerenders pages to static HTML
+npm run preview    # serve the production build in a local Cloudflare Worker
+```
 
-To use the components in your app, import them as follows:
+CI runs typecheck, lint, test and build on every push and pull request.
 
-```tsx
-import { Button } from "@/components/ui/button"
+## Adding shadcn/ui components
+
+```bash
+npx shadcn@latest add <component>
 ```
