@@ -4,25 +4,20 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  useParams,
 } from "@tanstack/react-router"
 
 import { ThemeProvider } from "@/components/theme-provider"
+import { defaultLocale, isLocale } from "@/content"
 import appCss from "@/index.css?url"
 import { themeScript } from "@/lib/theme-script"
 
-// English-only metadata for the walking skeleton; the /en and /cs routes from
-// ADR 0002 replace it when the site becomes bilingual.
+// Title and description come from content, per locale, in routes/$locale.tsx.
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Stanislav Svoboda · Frontend developer" },
-      {
-        name: "description",
-        content:
-          "Frontend developer (React, TypeScript) who works effectively with AI agents.",
-      },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -40,10 +35,15 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const { locale } = useParams({ strict: false })
+
   return (
     // The theme script adds a class to <html> before React hydrates, so the
     // class differs from the prerendered HTML on purpose.
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang={locale && isLocale(locale) ? locale : defaultLocale}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <HeadContent />

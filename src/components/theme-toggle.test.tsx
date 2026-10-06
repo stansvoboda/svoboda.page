@@ -17,7 +17,7 @@ function mockSystemTheme(theme: "dark" | "light") {
 function renderPage() {
   return render(
     <ThemeProvider>
-      <ThemeToggle />
+      <ThemeToggle label="Toggle theme" />
     </ThemeProvider>
   )
 }

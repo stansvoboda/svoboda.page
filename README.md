@@ -30,3 +30,10 @@ CI runs typecheck, lint, test and build on every push and pull request.
 ```bash
 npx shadcn@latest add <component>
 ```
+
+## Editing content
+
+All site text lives in [`src/content/data`](src/content/data), with every
+value in both English (`en`) and Czech (`cs`). Pages get it through the content
+module (`@/content`), which validates it. A missing translation fails
+`npm test` and `npm run build` with a message naming the field.

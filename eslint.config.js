@@ -20,6 +20,22 @@ export default defineConfig([
     },
     rules: {
       'react-refresh/only-export-components': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/content/*', '**/content/data/*', '**/content/schema'],
+              message:
+                'Import from "@/content": pages get content assembled and validated, never raw.',
+            },
+          ],
+        },
+      ],
     },
+  },
+  {
+    files: ['src/content/**'],
+    rules: { 'no-restricted-imports': 'off' },
   },
 ])

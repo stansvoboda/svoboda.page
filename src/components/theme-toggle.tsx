@@ -3,7 +3,7 @@ import { IconMoon, IconSun } from "@tabler/icons-react"
 import { useTheme } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 
-export function ThemeToggle() {
+export function ThemeToggle({ label }: Readonly<{ label: string }>) {
   const { toggleTheme } = useTheme()
 
   // Both icons are always rendered and CSS shows the right one, so the
@@ -12,7 +12,7 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      aria-label="Toggle theme"
+      aria-label={label}
       onClick={toggleTheme}
     >
       <IconSun className="dark:hidden" />
