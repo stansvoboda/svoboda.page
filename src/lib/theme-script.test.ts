@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest"
 
-import { themeScript } from "@/lib/theme-script"
+import { THEME_STORAGE_KEY, themeScript } from "@/lib/theme-script"
 
 function mockSystemTheme(theme: "dark" | "light") {
   vi.stubGlobal("matchMedia", (query: string) => ({
@@ -23,7 +23,7 @@ describe("theme script in the document head", () => {
 
   it("applies the stored choice over the system theme", () => {
     mockSystemTheme("dark")
-    localStorage.setItem("theme", "light")
+    localStorage.setItem(THEME_STORAGE_KEY, "light")
 
     runInHead()
 

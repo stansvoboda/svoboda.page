@@ -8,7 +8,6 @@ type ResolvedTheme = "dark" | "light"
 type ThemeProviderProps = {
   children: React.ReactNode
   defaultTheme?: Theme
-  storageKey?: string
   disableTransitionOnChange?: boolean
 }
 
@@ -88,7 +87,6 @@ function isEditableTarget(target: EventTarget | null) {
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = THEME_STORAGE_KEY,
   disableTransitionOnChange = true,
   ...props
 }: ThemeProviderProps) {
@@ -99,7 +97,7 @@ export function ThemeProvider({
       return defaultTheme
     }
 
-    const storedTheme = localStorage.getItem(storageKey)
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY)
     if (isTheme(storedTheme)) {
       return storedTheme
     }
@@ -107,21 +105,14 @@ export function ThemeProvider({
     return defaultTheme
   })
 
-  const setTheme = React.useCallback(
-    (nextTheme: Theme) => {
-      localStorage.setItem(storageKey, nextTheme)
-      setThemeState(nextTheme)
-    },
-    [storageKey]
-  )
+  const setTheme = React.useCallback((nextTheme: Theme) => {
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme)
+    setThemeState(nextTheme)
+  }, [])
 
   const toggleTheme = React.useCallback(() => {
-    setThemeState((currentTheme) => {
-      const nextTheme = oppositeOf(currentTheme)
-      localStorage.setItem(storageKey, nextTheme)
-      return nextTheme
-    })
-  }, [storageKey])
+    setTheme(oppositeOf(theme))
+  }, [theme, setTheme])
 
   const applyTheme = React.useCallback(
     (nextTheme: Theme) => {
@@ -195,7 +186,7 @@ export function ThemeProvider({
         return
       }
 
-      if (event.key !== storageKey) {
+      if (event.key !== THEME_STORAGE_KEY) {
         return
       }
 
@@ -212,7 +203,7 @@ export function ThemeProvider({
     return () => {
       window.removeEventListener("storage", handleStorageChange)
     }
-  }, [defaultTheme, storageKey])
+  }, [defaultTheme])
 
   const value = React.useMemo(
     () => ({

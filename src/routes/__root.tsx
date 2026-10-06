@@ -10,6 +10,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import appCss from "@/index.css?url"
 import { themeScript } from "@/lib/theme-script"
 
+// English-only metadata for the walking skeleton; the /en and /cs routes from
+// ADR 0002 replace it when the site becomes bilingual.
 export const Route = createRootRoute({
   head: () => ({
     meta: [

@@ -10,9 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc -b",
     "preview": "vite preview",
-    "test": "vitest run",
-    "deploy": "npm run build && wrangler deploy",
-    "cf-typegen": "wrangler types"
+    "test": "vitest run"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
