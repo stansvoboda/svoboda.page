@@ -171,8 +171,15 @@ npx sharp-cli@5.1.0 -i scripts/og-image.svg -o public/og.png
 ## Deployment
 
 Cloudflare Workers Builds deploys every push to `master` to
-`https://svoboda.page` and gives every pull request a preview URL. The
-one-time Cloudflare setup (Worker, domain, Email Routing, Turnstile, Web
+`https://svoboda.page` and gives every pull request a preview URL. Its build
+command runs the same checks as CI before building, so a push that fails
+typecheck, lint or tests never deploys:
+
+```bash
+npm run typecheck && npm run lint && npm test && npm run build
+```
+
+The one-time Cloudflare setup (Worker, domain, Email Routing, Turnstile, Web
 Analytics) is a step-by-step wizard, in Czech:
 
 ```bash
