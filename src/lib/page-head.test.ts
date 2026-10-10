@@ -85,15 +85,14 @@ describe("pageHead", () => {
     expect(meta(tags, "og:image:width")).toBe("1200")
     expect(meta(tags, "og:image:height")).toBe("630")
     expect(meta(tags, "og:image:alt")).toBe("Jane Doe, vývojářka")
-    expect(meta(tags, "twitter:card")).toBe("summary_large_image")
-    expect(meta(tags, "twitter:image")).toBe("https://jane.example/og.png")
-    expect(meta(tags, "twitter:image:alt")).toBe("Jane Doe, vývojářka")
   })
 
-  it("gives X (Twitter) the same title and description", () => {
+  it("asks X (Twitter) for a large image card, which reads the Open Graph tags", () => {
     const tags = head("en", "")
 
-    expect(meta(tags, "twitter:title")).toBe("Todo app")
-    expect(meta(tags, "twitter:description")).toBe("Keeps tasks.")
+    expect(meta(tags, "twitter:card")).toBe("summary_large_image")
+    expect(
+      tags.meta.filter((m) => "name" in m && m.name?.startsWith("twitter:"))
+    ).toHaveLength(1)
   })
 })

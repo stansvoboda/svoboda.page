@@ -14,6 +14,7 @@ import type {
 import type { ContactResult } from "@/contact/submit"
 import type { Content, Locale } from "@/content"
 import { useTurnstile } from "@/lib/use-turnstile"
+import { textLinkClass } from "@/lib/utils"
 
 export type SendContactMessage = (input: ContactInput) => Promise<ContactResult>
 
@@ -216,25 +217,21 @@ function OutcomeMessage({
   }
 }
 
-// Underlined rather than coloured: the dark theme's primary is too dark to
-// read as text on the dark background.
-const linkClass = "underline underline-offset-4 hover:text-primary"
-
 function ContactLinks({ contact }: Readonly<{ contact: Content["contact"] }>) {
   return (
     <ul className="flex flex-wrap gap-x-6 gap-y-2">
       <li>
-        <a href={`mailto:${contact.email}`} className={linkClass}>
+        <a href={`mailto:${contact.email}`} className={textLinkClass}>
           {contact.email}
         </a>
       </li>
       <li>
-        <a href={contact.linkedin} className={linkClass}>
+        <a href={contact.linkedin} className={textLinkClass}>
           LinkedIn
         </a>
       </li>
       <li>
-        <a href={contact.github} className={linkClass}>
+        <a href={contact.github} className={textLinkClass}>
           GitHub
         </a>
       </li>

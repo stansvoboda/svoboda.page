@@ -23,8 +23,8 @@ export const Route = createFileRoute("/$locale/projects/$slug")({
           content: loaderData.content,
           locale: loaderData.locale,
           path: `/projects/${params.slug}`,
-          // "<Project> · <site>"
-          title: `${loaderData.caseStudy.project.name} · ${loaderData.content.meta.title}`,
+          // "<Project> · <owner>": short enough that LinkedIn shows it whole.
+          title: `${loaderData.caseStudy.project.name} · ${loaderData.content.intro.name}`,
           description: loaderData.caseStudy.project.summary,
           type: "article",
         })

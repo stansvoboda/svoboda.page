@@ -1,6 +1,7 @@
 import { useId } from "react"
 
 import type { Content, Locale, Skill } from "@/content"
+import { textLinkClass } from "@/lib/utils"
 
 export function Skills({
   skills,
@@ -76,7 +77,7 @@ function SkillItem({
               <li key={project.slug}>
                 <a
                   href={`/${locale}/projects/${project.slug}`}
-                  className="underline underline-offset-4 hover:text-primary"
+                  className={textLinkClass}
                 >
                   {project.name}
                 </a>

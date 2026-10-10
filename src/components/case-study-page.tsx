@@ -2,6 +2,7 @@ import { useId } from "react"
 
 import { buttonVariants } from "@/components/ui/button"
 import type { CaseStudy, Content, Locale } from "@/content"
+import { cn, textLinkClass } from "@/lib/utils"
 
 type Sections = CaseStudy["project"]["caseStudy"]
 
@@ -28,7 +29,7 @@ export function CaseStudyPage({
       <header className="flex flex-col gap-4">
         <a
           href={`/${locale}#timeline`}
-          className="text-sm underline underline-offset-4 hover:text-primary"
+          className={cn("text-sm", textLinkClass)}
         >
           <span aria-hidden>← </span>
           {ui.caseStudy.backToTimeline}

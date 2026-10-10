@@ -56,11 +56,8 @@ export function pageHead({
       { property: "og:image:width", content: imageSize.width },
       { property: "og:image:height", content: imageSize.height },
       { property: "og:image:alt", content: image.alt },
+      // X (Twitter) takes the title, description and image from og:*.
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: title },
-      { name: "twitter:description", content: description },
-      { name: "twitter:image", content: imageUrl },
-      { name: "twitter:image:alt", content: image.alt },
     ],
     links: [
       { rel: "canonical", href: url },
