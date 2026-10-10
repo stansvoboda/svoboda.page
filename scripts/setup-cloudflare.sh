@@ -324,6 +324,15 @@ put_worker_secret CONTACT_TO "$CONTACT_TO"
 if ! confirm "Je adresa v Cloudflare ve stavu Verified?"; then
   SKIPPED+=("ověřit $CONTACT_TO v Email Routing → Destination addresses")
 fi
+echo
+say "Web ukazuje veřejnou adresu standa@$DOMAIN (když formulář selže)."
+say "Cloudflare ji přepošle do tvé schránky, takže osobní adresa zůstane skrytá."
+step "V Routing rules klikni Create address."
+step "Custom address: standa. Action: Send to an email. Destination: $CONTACT_TO."
+step "Save."
+if ! confirm "Je pravidlo pro standa@$DOMAIN aktivní?"; then
+  SKIPPED+=("pravidlo standa@$DOMAIN → $CONTACT_TO v Email Routing → Routing rules")
+fi
 pause
 
 # ── 5 ─────────────────────────────────────────────────────────────────────

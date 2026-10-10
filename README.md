@@ -13,6 +13,10 @@ npm install
 npm run dev        # start the dev server; open the URL it prints
 ```
 
+For the contact form to work in `npm run dev`, copy `.dev.vars.example` to
+`.dev.vars`. It holds Cloudflare's public Turnstile test secret; sent emails
+aren't delivered, Wrangler prints them to the terminal instead.
+
 Other commands:
 
 ```bash

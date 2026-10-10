@@ -1,14 +1,21 @@
 import { render, screen, within } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import { HomePage } from "@/components/home-page"
 import { assembleContent } from "@/content"
 import { validContent } from "@/test/content-fixture"
 
+// These tests don't send the contact form.
+const neverSent = vi.fn()
+
 describe("home page", () => {
   it("introduces the owner in the visitor's language", () => {
     render(
-      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+      <HomePage
+        locale="cs"
+        content={assembleContent(validContent(), "cs")}
+        sendContactMessage={neverSent}
+      />
     )
 
     expect(
@@ -22,7 +29,11 @@ describe("home page", () => {
 
   it("tells the owner's story in the About section", () => {
     render(
-      <HomePage locale="en" content={assembleContent(validContent(), "en")} />
+      <HomePage
+        locale="en"
+        content={assembleContent(validContent(), "en")}
+        sendContactMessage={neverSent}
+      />
     )
 
     expect(
@@ -33,7 +44,11 @@ describe("home page", () => {
 
   it("reserves an empty slot for the future Intro Video", () => {
     const { container } = render(
-      <HomePage locale="en" content={assembleContent(validContent(), "en")} />
+      <HomePage
+        locale="en"
+        content={assembleContent(validContent(), "en")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const slot = container.querySelector("[data-slot='intro-video']")
@@ -43,7 +58,11 @@ describe("home page", () => {
 
   it("shows the Timeline, Milestones oldest first, in the visitor's language", () => {
     render(
-      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+      <HomePage
+        locale="cs"
+        content={assembleContent(validContent(), "cs")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const timeline = screen.getByRole("region", { name: "Moje cesta" })
@@ -60,7 +79,11 @@ describe("home page", () => {
 
   it("renders a Milestone with no Projects without an empty Project list", () => {
     render(
-      <HomePage locale="en" content={assembleContent(validContent(), "en")} />
+      <HomePage
+        locale="en"
+        content={assembleContent(validContent(), "en")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const timeline = screen.getByRole("region", { name: "My path" })
@@ -72,7 +95,11 @@ describe("home page", () => {
 
   it("shows Skills grouped by level in the visitor's language", () => {
     render(
-      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+      <HomePage
+        locale="cs"
+        content={assembleContent(validContent(), "cs")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const skills = screen.getByRole("region", { name: "Dovednosti" })
@@ -85,7 +112,11 @@ describe("home page", () => {
 
   it("shows how many and which Projects use each Skill, linking to them", () => {
     render(
-      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+      <HomePage
+        locale="cs"
+        content={assembleContent(validContent(), "cs")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const skills = screen.getByRole("region", { name: "Dovednosti" })
@@ -103,7 +134,11 @@ describe("home page", () => {
 
   it("still shows a Skill no Project uses yet", () => {
     render(
-      <HomePage locale="en" content={assembleContent(validContent(), "en")} />
+      <HomePage
+        locale="en"
+        content={assembleContent(validContent(), "en")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const skills = screen.getByRole("region", { name: "Skills" })
@@ -114,7 +149,11 @@ describe("home page", () => {
 
   it("shows each Project as a card linking to its Case Study", () => {
     const { container } = render(
-      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+      <HomePage
+        locale="cs"
+        content={assembleContent(validContent(), "cs")}
+        sendContactMessage={neverSent}
+      />
     )
 
     const card = screen.getByRole("article", { name: "Úkolníček" })

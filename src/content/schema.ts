@@ -104,11 +104,13 @@ export const contentSchema = z
       heading: localized,
       text: localized,
     }),
-    // Placeholder until the contact form exists: "<comingSoon> <githubLink>."
     contact: z.strictObject({
       heading: localized,
-      comingSoon: localized,
-      githubLink: localized,
+      text: localized,
+      // Shown under the form, and again if a message can't be sent.
+      email: z.email(),
+      linkedin: z.url(),
+      github: z.url(),
     }),
     timeline: z
       .strictObject({
@@ -195,6 +197,27 @@ export const contentSchema = z
         // Introduces the Milestone the Project belongs to: "Part of: …".
         partOf: localized,
         backToTimeline: localized,
+      }),
+      // Labels and messages of the contact form.
+      contactForm: z.strictObject({
+        name: localized,
+        email: localized,
+        message: localized,
+        send: localized,
+        sending: localized,
+        // What is wrong with a field, one per code of the contact schema.
+        errors: z.strictObject({
+          required: localized,
+          invalidEmail: localized,
+          tooLong: localized,
+        }),
+        // Sending before Turnstile has decided the visitor is human.
+        verifying: localized,
+        sent: localized,
+        spam: localized,
+        failed: localized,
+        // Introduces the email, LinkedIn and GitHub links after a failure.
+        fallback: localized,
       }),
       // The page for a URL with nothing behind it.
       notFound: z.strictObject({

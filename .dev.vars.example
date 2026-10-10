@@ -1,0 +1,5 @@
+# Copy to .dev.vars (git ignores it) for `npm run dev`. The Turnstile secret
+# is Cloudflare's public test one, which accepts the test widget's token.
+# Locally, sent emails aren't delivered: Wrangler prints them to the terminal.
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+CONTACT_TO=you@example.com

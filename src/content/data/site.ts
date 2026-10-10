@@ -28,11 +28,13 @@ export const site = {
   },
   contact: {
     heading: { en: "Contact", cs: "Kontakt" },
-    comingSoon: {
-      en: "A contact form is on its way. Until then, find me on",
-      cs: "Kontaktní formulář je na cestě. Do té doby mě najdete na",
+    text: {
+      en: "Looking for a junior frontend developer, or want to talk about a project? Write to me.",
+      cs: "Hledáte junior frontend vývojáře, nebo chcete probrat projekt? Napište mi.",
     },
-    githubLink: { en: "GitHub", cs: "GitHubu" },
+    email: "standa@svoboda.page",
+    linkedin: "https://www.linkedin.com/in/svoboda-stanislav",
+    github: "https://github.com/stansvoboda",
   },
   timeline,
   skills,
@@ -66,6 +68,41 @@ export const site = {
       repo: { en: "Code on GitHub", cs: "Kód na GitHubu" },
       partOf: { en: "Part of", cs: "Součást" },
       backToTimeline: { en: "Back to my path", cs: "Zpět na moji cestu" },
+    },
+    contactForm: {
+      name: { en: "Name", cs: "Jméno" },
+      email: { en: "Email", cs: "E-mail" },
+      message: { en: "Message", cs: "Zpráva" },
+      send: { en: "Send message", cs: "Odeslat zprávu" },
+      sending: { en: "Sending…", cs: "Odesílám…" },
+      errors: {
+        required: { en: "Please fill this in.", cs: "Vyplňte prosím." },
+        invalidEmail: {
+          en: "Please enter a valid email address.",
+          cs: "Zadejte prosím platnou e-mailovou adresu.",
+        },
+        tooLong: { en: "This is too long.", cs: "Text je příliš dlouhý." },
+      },
+      verifying: {
+        en: "One moment, the spam check is still running. Then send again.",
+        cs: "Moment, ještě probíhá kontrola proti spamu. Pak odešlete znovu.",
+      },
+      sent: {
+        en: "Thank you, your message is on its way. I'll get back to you soon.",
+        cs: "Děkuji, zpráva je na cestě. Brzy se vám ozvu.",
+      },
+      spam: {
+        en: "The spam check didn't pass. Please try sending again.",
+        cs: "Kontrola proti spamu neprošla. Zkuste zprávu odeslat znovu.",
+      },
+      failed: {
+        en: "Sorry, the message couldn't be sent.",
+        cs: "Omlouvám se, zprávu se nepodařilo odeslat.",
+      },
+      fallback: {
+        en: "You can reach me directly:",
+        cs: "Můžete mě kontaktovat přímo:",
+      },
     },
     notFound: {
       title: { en: "Page not found", cs: "Stránka nenalezena" },

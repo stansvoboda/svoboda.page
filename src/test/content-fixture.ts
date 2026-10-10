@@ -16,8 +16,10 @@ export function validContent() {
     },
     contact: {
       heading: { en: "Contact", cs: "Kontakt" },
-      comingSoon: { en: "Soon. Meanwhile see", cs: "Brzy. Zatím viz" },
-      githubLink: { en: "GitHub", cs: "GitHub" },
+      text: { en: "Say hello.", cs: "Ozvěte se." },
+      email: "jane@example.com",
+      linkedin: "https://www.linkedin.com/in/jane-doe",
+      github: "https://github.com/jane-doe",
     },
     // Milestones are listed out of order on purpose: assembly sorts them.
     timeline: {
@@ -142,6 +144,23 @@ export function validContent() {
         repo: { en: "Code", cs: "Kód" },
         partOf: { en: "Part of", cs: "Součást" },
         backToTimeline: { en: "Back to my path", cs: "Zpět na cestu" },
+      },
+      contactForm: {
+        name: { en: "Your name", cs: "Vaše jméno" },
+        email: { en: "Your email", cs: "Váš e-mail" },
+        message: { en: "Your message", cs: "Vaše zpráva" },
+        send: { en: "Send", cs: "Odeslat" },
+        sending: { en: "Sending", cs: "Odesílám" },
+        errors: {
+          required: { en: "Required.", cs: "Povinné." },
+          invalidEmail: { en: "Not an email.", cs: "Není e-mail." },
+          tooLong: { en: "Too long.", cs: "Příliš dlouhé." },
+        },
+        verifying: { en: "Still checking.", cs: "Ještě kontroluji." },
+        sent: { en: "Sent, thanks.", cs: "Odesláno, díky." },
+        spam: { en: "Looks like spam.", cs: "Vypadá jako spam." },
+        failed: { en: "Sending failed.", cs: "Odeslání selhalo." },
+        fallback: { en: "Reach me here:", cs: "Najdete mě tu:" },
       },
       notFound: {
         title: { en: "Not found", cs: "Nenalezeno" },
