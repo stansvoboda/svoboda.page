@@ -11,11 +11,12 @@ type ContentModule = {
   listCaseStudySlugs: (content: unknown) => string[]
 }
 
-// The Case Study page of every Project in both locales, for prerendering.
-// Reading the content also validates it, so a missing translation (ADR 0002)
-// fails the build up front with the content module's message naming the
-// field, instead of an opaque error from prerendering the broken page.
-async function caseStudyPages() {
+// Validates the content in every locale and returns the Case Study page of
+// every Project, for prerendering. Validating here fails the build up front
+// when a translation is missing (ADR 0002), with the content module's
+// message naming the field, instead of an opaque error from prerendering the
+// broken page.
+async function validateContentAndListCaseStudyPages() {
   const { module } = await runnerImport<ContentModule>("./src/content/index.ts")
   return module.locales.flatMap((locale) =>
     module
@@ -36,7 +37,9 @@ export default defineConfig(async ({ command }) => ({
         { path: "/en" },
         { path: "/cs" },
         // Only the build prerenders; dev renders pages on request.
-        ...(command === "build" ? await caseStudyPages() : []),
+        ...(command === "build"
+          ? await validateContentAndListCaseStudyPages()
+          : []),
       ],
       prerender: {
         enabled: true,

@@ -27,13 +27,13 @@ export const Route = createFileRoute("/$locale/projects/$slug")({
       { name: "description", content: loaderData.caseStudy.project.summary },
     ],
   }),
-  component: CaseStudy,
+  component: CaseStudyRoute,
   // Its own 404, so an unknown slug keeps the locale's layout around it: a
   // notFound() thrown here is shown by the nearest route that has one.
   notFoundComponent: LocaleNotFoundPage,
 })
 
-function CaseStudy() {
+function CaseStudyRoute() {
   const { caseStudy } = Route.useLoaderData()
   const { locale, content } = localeRoute.useLoaderData()
 

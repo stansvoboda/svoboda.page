@@ -14,11 +14,14 @@ import appCss from "@/index.css?url"
 import { themeScript } from "@/lib/theme-script"
 
 // Title and description come from content, per locale, in routes/$locale.tsx.
+// The deepest route's title wins, so the one here only shows on a page
+// outside any locale, like the 404 for /xx.
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: getContent(defaultLocale).meta.title },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
