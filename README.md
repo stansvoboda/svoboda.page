@@ -25,6 +25,21 @@ npm run preview    # serve the production build in a local Cloudflare Worker
 
 CI runs typecheck, lint, test and build on every push and pull request.
 
+## Deployment
+
+Cloudflare Workers Builds deploys every push to `master` to
+`https://svoboda.page` and gives every pull request a preview URL. The
+one-time Cloudflare setup (Worker, domain, Email Routing, Turnstile, Web
+Analytics) is a step-by-step wizard, in Czech:
+
+```bash
+./scripts/setup-cloudflare.sh
+```
+
+Secrets (`TURNSTILE_SECRET_KEY`, `CONTACT_TO`) live only on the Worker, set by
+the wizard through `wrangler secret put`. The public Turnstile site key is in
+`.env.production`.
+
 ## Adding shadcn/ui components
 
 ```bash

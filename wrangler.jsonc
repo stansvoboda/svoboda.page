@@ -4,4 +4,14 @@
   "compatibility_date": "2026-10-01",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  // Deploying attaches both hostnames to the Worker and creates their DNS
+  // records. A Redirect Rule in the dashboard sends www to the bare domain.
+  "routes": [
+    { "pattern": "svoboda.page", "custom_domain": true },
+    { "pattern": "www.svoboda.page", "custom_domain": true },
+  ],
+  // Sends the contact form to the owner's inbox. The address is the
+  // CONTACT_TO secret, not a restriction here, because the repo is public;
+  // Cloudflare only delivers to verified addresses of the account anyway.
+  "send_email": [{ "name": "EMAIL" }],
 }
