@@ -1,0 +1,10 @@
+<!-- Source of public/og.png, the link preview image (1200 × 630).
+     Re-render after editing: see "Link preview image" in the README. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1c1917"/>
+  <rect x="96" y="150" width="12" height="250" fill="#e11d48"/>
+  <text x="144" y="230" font-family="Helvetica, Arial, sans-serif" font-size="84" font-weight="700" fill="#fafaf9">Stanislav Svoboda</text>
+  <text x="144" y="310" font-family="Helvetica, Arial, sans-serif" font-size="44" fill="#e7e5e4">Frontend developer · React · TypeScript</text>
+  <text x="144" y="380" font-family="Helvetica, Arial, sans-serif" font-size="44" fill="#e7e5e4">Works effectively with AI agents</text>
+  <text x="144" y="530" font-family="Helvetica, Arial, sans-serif" font-size="36" fill="#a8a29e">svoboda.page</text>
+</svg>

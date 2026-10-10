@@ -10,6 +10,18 @@ export const site = {
       en: "Stanislav Svoboda · Frontend developer",
       cs: "Stanislav Svoboda · Frontend vývojář",
     },
+    description: {
+      en: "Junior frontend developer (React, TypeScript) who works effectively with AI agents. From land surveying to code: my path, my projects and how I build them.",
+      cs: "Junior frontend vývojář (React, TypeScript), který efektivně pracuje s AI agenty. Od geodézie ke kódu: moje cesta, moje projekty a jak je stavím.",
+    },
+    url: "https://svoboda.page",
+    image: {
+      src: "/og.png",
+      alt: {
+        en: "Stanislav Svoboda, frontend developer: React, TypeScript, AI agents",
+        cs: "Stanislav Svoboda, frontend vývojář: React, TypeScript, AI agenti",
+      },
+    },
   },
   intro: {
     name: "Stanislav Svoboda",

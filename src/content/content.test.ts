@@ -52,6 +52,15 @@ describe("assembleContent", () => {
     )
   })
 
+  it("rejects a site URL ending in a slash, which would double page paths", () => {
+    const raw = validContent()
+    raw.meta.url = "https://jane.example/"
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "meta.url: expected the site's address without a trailing slash"
+    )
+  })
+
   it("rejects a misspelled locale instead of ignoring it", () => {
     const raw = validContent()
     raw.intro.contactCta = { en: "Contact me", cz: "Napište mi" } as never

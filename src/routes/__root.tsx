@@ -12,8 +12,9 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { defaultLocale, getContent, isLocale } from "@/content"
 import appCss from "@/index.css?url"
 import { themeScript } from "@/lib/theme-script"
+import { webAnalyticsScripts } from "@/lib/web-analytics"
 
-// Title and description come from content, per locale, in routes/$locale.tsx.
+// Each page sets its own title, description and link preview (lib/page-head).
 // The deepest route's title wins, so the one here only shows on a page
 // outside any locale, like the 404 for /xx.
 export const Route = createRootRoute({
@@ -23,7 +24,11 @@ export const Route = createRootRoute({
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: getContent(defaultLocale).meta.title },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    scripts: webAnalyticsScripts(import.meta.env.VITE_CF_WEB_ANALYTICS_TOKEN),
   }),
   component: RootComponent,
   // A URL outside any locale, like /xx: the 404 in the default locale.

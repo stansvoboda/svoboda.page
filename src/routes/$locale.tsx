@@ -20,11 +20,9 @@ export const Route = createFileRoute("/$locale")({
     return { locale: params.locale, content: getContent(params.locale) }
   },
   head: ({ loaderData }) => ({
-    meta: loaderData && [
-      { title: loaderData.content.meta.title },
-      // The positioning line already says who the owner is in one sentence.
-      { name: "description", content: loaderData.content.intro.positioning },
-    ],
+    // Only shows on a 404 under the locale, like /en/whatever: each page
+    // replaces it with its own title, description and link preview.
+    meta: loaderData && [{ title: loaderData.content.meta.title }],
   }),
   component: LocaleLayout,
   // A path under a locale that matches no page, like /en/whatever, shown

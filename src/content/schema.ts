@@ -92,8 +92,19 @@ const maxFeatured = 3
 
 export const contentSchema = z
   .strictObject({
+    // What search engines and link previews (LinkedIn) show for the site.
     meta: z.strictObject({
       title: localized,
+      // The home page's description; a Case Study uses its Project's summary.
+      description: localized,
+      // The site's address, for the absolute URLs that canonical links and
+      // link previews need: "https://svoboda.page".
+      url: z.url().refine((url) => !url.endsWith("/"), {
+        error: "expected the site's address without a trailing slash",
+      }),
+      // The picture of every link preview, 1200 × 630 pixels. A PNG or JPEG,
+      // since LinkedIn doesn't show SVG.
+      image: z.strictObject({ src: image, alt: localized }),
     }),
     intro: z.strictObject({
       name: z.string().trim().min(1),

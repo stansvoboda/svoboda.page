@@ -28,7 +28,7 @@ export function CaseStudyPage({
       <header className="flex flex-col gap-4">
         <a
           href={`/${locale}#timeline`}
-          className="text-sm text-primary underline-offset-4 hover:underline"
+          className="text-sm underline underline-offset-4 hover:text-primary"
         >
           <span aria-hidden>← </span>
           {ui.caseStudy.backToTimeline}

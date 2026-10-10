@@ -4,6 +4,15 @@ export function validContent() {
   return {
     meta: {
       title: { en: "Jane Doe · Developer", cs: "Jane Doe · Vývojářka" },
+      description: {
+        en: "Jane builds web apps.",
+        cs: "Jane staví webové aplikace.",
+      },
+      url: "https://jane.example",
+      image: {
+        src: "/og.png",
+        alt: { en: "Jane Doe, developer", cs: "Jane Doe, vývojářka" },
+      },
     },
     intro: {
       name: "Jane Doe",

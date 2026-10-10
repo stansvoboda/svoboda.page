@@ -359,10 +359,16 @@ stage "Web Analytics"
 say "Počítá návštěvy bez cookies, takže web nepotřebuje cookie lištu."
 echo
 open_url "$DASH/web-analytics"
-step "Add a site → v nabídce hostname vyber $DOMAIN → Done."
-note "Automatic setup je zapnutý sám. Měřicí skript vloží Cloudflare do"
-note "stránek, až bude web na doméně. Ověříme to v issue #10."
-pause "Hotovo? Enter…"
+step "Pokud tam $DOMAIN ještě není: Add a site → v nabídce hostname vyber $DOMAIN → Done."
+step "U $DOMAIN otevři Manage site."
+step "Vyber Enable with JS Snippet installation a ulož."
+note "Do stránek z Workeru Cloudflare skript sám nevložil, proto ho"
+note "vkládá web (src/lib/web-analytics.ts) a potřebuje k tomu token."
+step "Ve snippetu najdi data-cf-beacon='{\"token\": \"…\"}' a zkopíruj token."
+echo
+ask CF_WEB_ANALYTICS_TOKEN "Vlož token (veřejný, je vidět ve stránce):"
+write_env VITE_CF_WEB_ANALYTICS_TOKEN "$CF_WEB_ANALYTICS_TOKEN"
+pause
 
 # ── 7 ─────────────────────────────────────────────────────────────────────
 stage "Přesměrování www.$DOMAIN → $DOMAIN"
