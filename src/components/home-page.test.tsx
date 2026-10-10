@@ -3,20 +3,24 @@ import { describe, expect, it, vi } from "vitest"
 
 import { HomePage } from "@/components/home-page"
 import { assembleContent } from "@/content"
+import type { Locale } from "@/content"
 import { validContent } from "@/test/content-fixture"
 
-// These tests don't send the contact form.
-const neverSent = vi.fn()
+// The home page with the test content. These tests don't send the contact
+// form; contact.test.tsx does.
+function homePage(locale: Locale) {
+  return (
+    <HomePage
+      locale={locale}
+      content={assembleContent(validContent(), locale)}
+      sendContactMessage={vi.fn()}
+    />
+  )
+}
 
 describe("home page", () => {
   it("introduces the owner in the visitor's language", () => {
-    render(
-      <HomePage
-        locale="cs"
-        content={assembleContent(validContent(), "cs")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("cs"))
 
     expect(
       screen.getByRole("heading", { level: 1, name: "Jane Doe" })
@@ -28,13 +32,7 @@ describe("home page", () => {
   })
 
   it("tells the owner's story in the About section", () => {
-    render(
-      <HomePage
-        locale="en"
-        content={assembleContent(validContent(), "en")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("en"))
 
     expect(
       screen.getByRole("heading", { level: 2, name: "About" })
@@ -43,13 +41,7 @@ describe("home page", () => {
   })
 
   it("reserves an empty slot for the future Intro Video", () => {
-    const { container } = render(
-      <HomePage
-        locale="en"
-        content={assembleContent(validContent(), "en")}
-        sendContactMessage={neverSent}
-      />
-    )
+    const { container } = render(homePage("en"))
 
     const slot = container.querySelector("[data-slot='intro-video']")
     expect(slot).not.toBeNull()
@@ -57,13 +49,7 @@ describe("home page", () => {
   })
 
   it("shows the Timeline, Milestones oldest first, in the visitor's language", () => {
-    render(
-      <HomePage
-        locale="cs"
-        content={assembleContent(validContent(), "cs")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("cs"))
 
     const timeline = screen.getByRole("region", { name: "Moje cesta" })
     const milestones = within(timeline).getAllByRole("heading", { level: 3 })
@@ -78,13 +64,7 @@ describe("home page", () => {
   })
 
   it("renders a Milestone with no Projects without an empty Project list", () => {
-    render(
-      <HomePage
-        locale="en"
-        content={assembleContent(validContent(), "en")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("en"))
 
     const timeline = screen.getByRole("region", { name: "My path" })
     const bakery = within(timeline).getByRole("listitem", { name: "Baker" })
@@ -94,13 +74,7 @@ describe("home page", () => {
   })
 
   it("shows Skills grouped by level in the visitor's language", () => {
-    render(
-      <HomePage
-        locale="cs"
-        content={assembleContent(validContent(), "cs")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("cs"))
 
     const skills = screen.getByRole("region", { name: "Dovednosti" })
     expect(
@@ -111,13 +85,7 @@ describe("home page", () => {
   })
 
   it("shows how many and which Projects use each Skill, linking to them", () => {
-    render(
-      <HomePage
-        locale="cs"
-        content={assembleContent(validContent(), "cs")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("cs"))
 
     const skills = screen.getByRole("region", { name: "Dovednosti" })
     const react = within(skills).getByRole("listitem", { name: "React" })
@@ -133,13 +101,7 @@ describe("home page", () => {
   })
 
   it("still shows a Skill no Project uses yet", () => {
-    render(
-      <HomePage
-        locale="en"
-        content={assembleContent(validContent(), "en")}
-        sendContactMessage={neverSent}
-      />
-    )
+    render(homePage("en"))
 
     const skills = screen.getByRole("region", { name: "Skills" })
     const rust = within(skills).getByRole("listitem", { name: "Rust" })
@@ -148,13 +110,7 @@ describe("home page", () => {
   })
 
   it("shows each Project as a card linking to its Case Study", () => {
-    const { container } = render(
-      <HomePage
-        locale="cs"
-        content={assembleContent(validContent(), "cs")}
-        sendContactMessage={neverSent}
-      />
-    )
+    const { container } = render(homePage("cs"))
 
     const card = screen.getByRole("article", { name: "Úkolníček" })
     expect(within(card).getByText("Drží úkoly.")).toBeDefined()

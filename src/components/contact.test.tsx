@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { HomePage } from "@/components/home-page"
-import type { ContactInput, ContactResult } from "@/contact/submit"
+import type { ContactInput } from "@/contact/schema"
+import type { ContactResult } from "@/contact/submit"
 import { assembleContent } from "@/content"
 import type { Locale } from "@/content"
 import { validContent } from "@/test/content-fixture"
@@ -125,4 +126,59 @@ describe("contact section", () => {
       "https://github.com/jane-doe",
     ])
   })
+
+  it("offers the direct contact links when the spam check fails", async () => {
+    const contact = renderHome("en", async () => ({ status: "spam" }))
+
+    await fillInAndSend(contact)
+
+    const alert = within(contact).getByRole("alert")
+    expect(alert.textContent).toContain("Looks like spam.")
+    expect(within(alert).getByRole("link", { name: "LinkedIn" })).toBeDefined()
+  })
+
+  it("offers the direct contact links when the Turnstile widget can't run", async () => {
+    window.turnstile = {
+      render: (_element, options) => {
+        options["error-callback"]?.()
+        return "widget"
+      },
+      reset: () => {},
+      remove: () => {},
+    }
+    const send = vi.fn()
+    const contact = renderHome("en", send)
+
+    await fillInAndSend(contact)
+
+    const alert = within(contact).getByRole("alert")
+    expect(alert.textContent).toContain("Sending failed.")
+    expect(within(alert).getByRole("link", { name: "GitHub" })).toBeDefined()
+    expect(send).not.toHaveBeenCalled()
+  })
+
+  it("shows the server's field errors until the field is fixed", async () => {
+    const contact = renderHome("en", async () => ({
+      status: "invalid",
+      errors: { email: "invalidEmail" },
+    }))
+    const user = userEvent.setup()
+
+    await fillInAndSend(contact, user)
+    expect(within(contact).getByText("Not an email.")).toBeDefined()
+
+    await user.type(within(contact).getByLabelText("Your email"), "m")
+    expect(within(contact).queryByText("Not an email.")).toBeNull()
+  })
 })
+
+// Fills in a valid message in English and presses Send.
+async function fillInAndSend(contact: HTMLElement, user = userEvent.setup()) {
+  await user.type(within(contact).getByLabelText("Your name"), "Ann")
+  await user.type(
+    within(contact).getByLabelText("Your email"),
+    "ann@example.com"
+  )
+  await user.type(within(contact).getByLabelText("Your message"), "Hello!")
+  await user.click(within(contact).getByRole("button", { name: "Send" }))
+}

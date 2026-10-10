@@ -3,16 +3,8 @@ import type {
   ContactErrorCode,
   ContactField,
   ContactFieldErrors,
+  ContactInput,
 } from "@/contact/schema"
-
-// What the visitor sends: the form's fields and the Turnstile token that
-// proves a human filled it in.
-export type ContactInput = {
-  name: string
-  email: string
-  message: string
-  token: string
-}
 
 // The email that lands in the owner's inbox.
 export type ContactEmail = {

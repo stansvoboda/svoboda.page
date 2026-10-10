@@ -29,11 +29,14 @@ function loadTurnstile() {
 // Shows the Turnstile widget in the element `ref` points to. Turnstile
 // checks in the background that the visitor is human and hands over a
 // token, which the server verifies. A token works only once, so after a
-// failed send, `reset` gets a fresh one.
+// failed send, `reset` gets a fresh one. `failed` means the widget couldn't
+// run (the script was blocked, or the check itself broke), so no token will
+// come.
 export function useTurnstile(siteKey: string, language: string) {
   const ref = useRef<HTMLDivElement>(null)
   const widgetId = useRef<string | undefined>(undefined)
   const [token, setToken] = useState<string>()
+  const [failed, setFailed] = useState(false)
 
   // Runs only in the browser, so prerendered HTML has just the empty element.
   useEffect(() => {
@@ -46,14 +49,21 @@ export function useTurnstile(siteKey: string, language: string) {
         widgetId.current = turnstile.render(ref.current, {
           sitekey: siteKey,
           language,
-          callback: setToken,
+          callback: (token) => {
+            setFailed(false)
+            setToken(token)
+          },
           "expired-callback": () => setToken(undefined),
-          "error-callback": () => setToken(undefined),
+          "error-callback": () => {
+            setToken(undefined)
+            setFailed(true)
+          },
         })
       })
-      // Without the widget there is no token; the server rejects the send
-      // and the form offers the direct contact links.
-      .catch((error: unknown) => console.error(error))
+      .catch((error: unknown) => {
+        console.error(error)
+        setFailed(true)
+      })
     return () => {
       cancelled = true
       if (widgetId.current) {
@@ -65,10 +75,11 @@ export function useTurnstile(siteKey: string, language: string) {
 
   const reset = useCallback(() => {
     setToken(undefined)
+    setFailed(false)
     if (widgetId.current) {
       window.turnstile?.reset(widgetId.current)
     }
   }, [])
 
-  return { ref, token, reset }
+  return { ref, token, failed, reset }
 }

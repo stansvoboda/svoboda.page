@@ -6,14 +6,30 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { contactMessageSchema } from "@/contact/schema"
-import type { ContactErrorCode, ContactField } from "@/contact/schema"
-import type { ContactInput, ContactResult } from "@/contact/submit"
+import type {
+  ContactErrorCode,
+  ContactField,
+  ContactInput,
+} from "@/contact/schema"
+import type { ContactResult } from "@/contact/submit"
 import type { Content, Locale } from "@/content"
 import { useTurnstile } from "@/lib/use-turnstile"
 
 export type SendContactMessage = (input: ContactInput) => Promise<ContactResult>
 
 type Labels = Content["ui"]["contactForm"]
+
+// The form's fields, in order, with what makes each one different.
+const fields = [
+  { name: "name", autoComplete: "name" },
+  { name: "email", type: "email", autoComplete: "email" },
+  { name: "message", multiline: true },
+] satisfies {
+  name: ContactField
+  type?: string
+  autoComplete?: string
+  multiline?: boolean
+}[]
 
 // What the visitor sees above the button after pressing it.
 type Outcome = ContactResult["status"] | "verifying"
@@ -66,6 +82,7 @@ function ContactForm({
   const {
     ref: turnstileRef,
     token,
+    failed: turnstileFailed,
     reset: resetTurnstile,
   } = useTurnstile(import.meta.env.VITE_TURNSTILE_SITE_KEY, locale)
   const [outcome, setOutcome] = useState<Outcome>()
@@ -79,12 +96,13 @@ function ContactForm({
     validators: { onDynamic: contactMessageSchema },
     onSubmit: async ({ value }) => {
       if (!token) {
-        setOutcome("verifying")
+        // A broken widget won't produce a token, so waiting won't help.
+        setOutcome(turnstileFailed ? "failed" : "verifying")
         return
       }
       let result: ContactResult
       try {
-        result = await sendContactMessage({ ...value, token: token })
+        result = await sendContactMessage({ ...value, token })
       } catch {
         // The Worker didn't answer, for example the visitor is offline.
         result = { status: "failed" }
@@ -92,17 +110,13 @@ function ContactForm({
       setOutcome(result.status)
       if (result.status === "sent") {
         form.reset()
+      } else if (result.status === "invalid") {
+        // Stored where the schema puts its errors, so the next change
+        // re-checks the field and clears the error once it is fixed.
+        form.setErrorMap({ onDynamic: { fields: result.errors } })
       } else {
-        // The token has been used up; the next try needs a new one.
+        // Turnstile has used up the token; the next try needs a new one.
         resetTurnstile()
-      }
-      if (result.status === "invalid") {
-        for (const [field, code] of Object.entries(result.errors)) {
-          form.setFieldMeta(field as ContactField, (meta) => ({
-            ...meta,
-            errorMap: { ...meta.errorMap, onServer: code },
-          }))
-        }
       }
     },
   })
@@ -116,29 +130,29 @@ function ContactForm({
         void form.handleSubmit()
       }}
     >
-      {(["name", "email", "message"] as const).map((name) => (
+      {fields.map(({ name, multiline, type, autoComplete }) => (
         <form.Field key={name} name={name}>
           {(field) => {
             const code = errorCode(field.state.meta.errors[0])
-            const errorId = `${field.name}-error`
-            const Control = name === "message" ? Textarea : Input
+            const id = `contact-${name}`
+            const Control = multiline ? Textarea : Input
             return (
               <div className="flex flex-col gap-2">
-                <Label htmlFor={`contact-${name}`}>{labels[name]}</Label>
+                <Label htmlFor={id}>{labels[name]}</Label>
                 <Control
-                  id={`contact-${name}`}
+                  id={id}
                   name={name}
-                  type={name === "email" ? "email" : undefined}
-                  autoComplete={name === "message" ? undefined : name}
+                  type={type}
+                  autoComplete={autoComplete}
+                  rows={multiline ? 6 : undefined}
                   value={field.state.value}
                   onChange={(event) => field.handleChange(event.target.value)}
                   onBlur={field.handleBlur}
                   aria-invalid={code ? true : undefined}
-                  aria-describedby={code ? errorId : undefined}
-                  rows={name === "message" ? 6 : undefined}
+                  aria-describedby={code ? `${id}-error` : undefined}
                 />
                 {code && (
-                  <p id={errorId} className="text-sm text-destructive">
+                  <p id={`${id}-error`} className="text-sm text-destructive">
                     {labels.errors[code]}
                   </p>
                 )}
@@ -148,7 +162,7 @@ function ContactForm({
         </form.Field>
       ))}
       <div ref={turnstileRef} />
-      <Outcome outcome={outcome} labels={labels} contact={contact} />
+      <OutcomeMessage outcome={outcome} labels={labels} contact={contact} />
       <form.Subscribe selector={(state) => state.isSubmitting}>
         {(isSubmitting) => (
           <Button type="submit" disabled={isSubmitting} className="self-start">
@@ -172,7 +186,7 @@ function errorCode(error: unknown): ContactErrorCode | undefined {
   return undefined
 }
 
-function Outcome({
+function OutcomeMessage({
   outcome,
   labels,
   contact,
@@ -187,15 +201,10 @@ function Outcome({
     case "verifying":
       return <p role="status">{labels.verifying}</p>
     case "spam":
-      return (
-        <p role="alert" className="text-destructive">
-          {labels.spam}
-        </p>
-      )
     case "failed":
       return (
         <div role="alert" className="flex flex-col gap-2">
-          <p className="text-destructive">{labels.failed}</p>
+          <p className="text-destructive">{labels[outcome]}</p>
           <p>{labels.fallback}</p>
           <ContactLinks contact={contact} />
         </div>
