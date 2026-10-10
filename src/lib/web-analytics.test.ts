@@ -7,7 +7,7 @@ describe("webAnalyticsScripts", () => {
     expect(webAnalyticsScripts("abc123")).toEqual([
       {
         src: "https://static.cloudflareinsights.com/beacon.min.js",
-        defer: true,
+        type: "module",
         "data-cf-beacon": '{"token":"abc123"}',
       },
     ])
