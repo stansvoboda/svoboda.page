@@ -9,7 +9,7 @@ export const skills = {
   heading: { en: "Skills", cs: "Dovednosti" },
   levels: {
     daily: { en: "Use daily", cs: "Používám denně" },
-    experienced: { en: "Have experience with", cs: "Mám zkušenosti s" },
+    experienced: { en: "Have experience with", cs: "Mám zkušenosti" },
     learning: { en: "Learning", cs: "Učím se" },
   },
   items: [
