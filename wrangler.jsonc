@@ -14,4 +14,9 @@
   // CONTACT_TO secret, not a restriction here, because the repo is public;
   // Cloudflare only delivers to verified addresses of the account anyway.
   "send_email": [{ "name": "EMAIL" }],
+  // Pull request previews (`wrangler preview`) don't inherit production
+  // bindings, so each binding is repeated here.
+  "previews": {
+    "send_email": [{ "name": "EMAIL" }],
+  },
 }
