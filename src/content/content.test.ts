@@ -56,3 +56,78 @@ describe("assembleContent", () => {
     )
   })
 })
+
+describe("assembleContent: Timeline", () => {
+  it("lists Milestones from oldest to newest, each with its Projects", () => {
+    const { timeline } = assembleContent(validContent(), "en")
+
+    expect(timeline.heading).toBe("My path")
+    expect(timeline.milestones.map((m) => m.id)).toEqual([
+      "bakery",
+      "bootcamp",
+      "freelance",
+    ])
+    expect(timeline.milestones[1].projects.map((p) => p.slug)).toEqual([
+      "todo-app",
+    ])
+    expect(timeline.milestones[2].projects.map((p) => p.slug)).toEqual(["shop"])
+  })
+
+  it("puts an ongoing Milestone after a finished one that started the same month", () => {
+    const raw = validContent()
+    // "freelance" is ongoing; give it the bootcamp's start and list it first.
+    raw.timeline.milestones[1].start = "2023-09"
+    raw.timeline.milestones.reverse()
+
+    const { timeline } = assembleContent(raw, "en")
+
+    expect(timeline.milestones.map((m) => m.id)).toEqual([
+      "bakery",
+      "bootcamp",
+      "freelance",
+    ])
+    expect(timeline.milestones[2].end).toBeUndefined()
+  })
+
+  it("keeps a Milestone with no Projects, with an empty list", () => {
+    const { timeline } = assembleContent(validContent(), "cs")
+
+    expect(timeline.milestones[0].title).toBe("Pekařka")
+    expect(timeline.milestones[0].projects).toEqual([])
+  })
+
+  it("rejects a Project referencing an unknown Milestone", () => {
+    const raw = validContent()
+    raw.timeline.projects[1].milestone = "frelance"
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      'timeline.projects.1.milestone: no Milestone with id "frelance"'
+    )
+  })
+
+  it("rejects two Projects with the same slug", () => {
+    const raw = validContent()
+    raw.timeline.projects[1].slug = "todo-app"
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      'timeline.projects.1.slug: slug "todo-app" is already used by another Project'
+    )
+  })
+
+  it("accepts three Featured Projects but rejects a fourth", () => {
+    const raw = validContent()
+    const [todo] = raw.timeline.projects
+    for (const slug of ["second", "third"]) {
+      raw.timeline.projects.push({ ...todo, slug })
+    }
+    raw.timeline.projects[1].featured = false
+
+    expect(() => assembleContent(raw, "en")).not.toThrow()
+
+    raw.timeline.projects[1].featured = true
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "timeline.projects: 4 Projects are featured, at most 3 may be"
+    )
+  })
+})

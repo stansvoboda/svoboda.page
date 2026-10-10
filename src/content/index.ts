@@ -12,7 +12,18 @@ type InLocale<T> = T extends Localized
     ? { [K in keyof T]: InLocale<T[K]> }
     : T
 
-export type Content = InLocale<ReturnType<typeof contentSchema.parse>>
+type ContentInLocale = InLocale<ReturnType<typeof contentSchema.parse>>
+
+export type Project = ContentInLocale["timeline"]["projects"][number]
+export type Milestone = ContentInLocale["timeline"]["milestones"][number] & {
+  projects: Project[]
+}
+
+// The content of one locale as pages read it. Milestones and Projects are
+// written as two flat lists; pages get them joined into the Timeline.
+export type Content = Omit<ContentInLocale, "timeline"> & {
+  timeline: { heading: string; milestones: Milestone[] }
+}
 
 export class ContentError extends Error {
   override name = "ContentError"
@@ -30,6 +41,9 @@ function isLocalized(value: object): value is Localized {
 function pickLocale(value: unknown, locale: Locale): unknown {
   if (typeof value !== "object" || value === null) {
     return value
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => pickLocale(item, locale))
   }
   if (isLocalized(value)) {
     return value[locale]
@@ -52,7 +66,32 @@ export function assembleContent(raw: unknown, locale: Locale): Content {
     )
     throw new ContentError(`Content is invalid:\n${problems.join("\n")}`)
   }
-  return pickLocale(result.data, locale) as Content
+  const inLocale = pickLocale(result.data, locale) as ContentInLocale
+  return { ...inLocale, timeline: buildTimeline(inLocale.timeline) }
+}
+
+// An ongoing Milestone has no end; it sorts as if it ended in the future.
+const ongoing = "9999-12"
+
+// Milestones from oldest to newest, each holding its Projects in the order
+// they were written.
+function buildTimeline({
+  heading,
+  milestones,
+  projects,
+}: ContentInLocale["timeline"]): Content["timeline"] {
+  const sorted = milestones.toSorted(
+    (a, b) =>
+      a.start.localeCompare(b.start) ||
+      (a.end ?? ongoing).localeCompare(b.end ?? ongoing)
+  )
+  return {
+    heading,
+    milestones: sorted.map((milestone) => ({
+      ...milestone,
+      projects: projects.filter((p) => p.milestone === milestone.id),
+    })),
+  }
 }
 
 // The real content in the repo, in one locale. Throws ContentError if any

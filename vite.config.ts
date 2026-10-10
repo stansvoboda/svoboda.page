@@ -49,6 +49,10 @@ export default defineConfig({
         // Write en.html rather than en/index.html, so Cloudflare serves /en
         // as is instead of redirecting it to /en/.
         autoSubfolderIndex: false,
+        // Project cards already link to Case Study pages, which ticket #7
+        // builds. Until then those links would 404 and fail the build.
+        // TODO(#7): remove this filter.
+        filter: ({ path }) => !/^\/(en|cs)\/projects\//.test(path),
       },
     }),
     react(),

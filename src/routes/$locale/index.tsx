@@ -9,7 +9,7 @@ export const Route = createFileRoute("/$locale/")({
 })
 
 function Home() {
-  const { content } = localeRoute.useLoaderData()
+  const { locale, content } = localeRoute.useLoaderData()
 
-  return <HomePage content={content} />
+  return <HomePage locale={locale} content={content} />
 }

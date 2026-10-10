@@ -1,4 +1,5 @@
 import type { RawContent } from "../schema"
+import { timeline } from "./timeline"
 
 // The site's own text. Pages never import this file; they get it assembled
 // for one locale from the content module (`getContent`).
@@ -32,8 +33,10 @@ export const site = {
     },
     githubLink: { en: "GitHub", cs: "GitHubu" },
   },
+  timeline,
   ui: {
     toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
     switchLanguage: { en: "Čeština", cs: "English" },
+    ongoing: { en: "present", cs: "dosud" },
   },
 } satisfies RawContent
