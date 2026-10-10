@@ -55,7 +55,7 @@ export function validContent() {
           milestone: "bootcamp",
           name: { en: "Todo app", cs: "Úkolníček" },
           summary: { en: "Keeps tasks.", cs: "Drží úkoly." },
-          technologies: ["React", "CSS"],
+          technologies: ["react", "css"],
           featured: true,
           repo: "https://github.com/example/todo-app",
           thumbnail: "/projects/todo-app.svg",
@@ -83,7 +83,7 @@ export function validContent() {
           milestone: "freelance",
           name: { en: "Shop", cs: "Obchod" },
           summary: { en: "Sells bread.", cs: "Prodává chleba." },
-          technologies: ["TypeScript"],
+          technologies: ["typescript", "react"],
           featured: false,
           demo: "https://shop.example.com",
           thumbnail: "/projects/shop.svg",
@@ -106,10 +106,29 @@ export function validContent() {
         },
       ],
     },
+    // Skills are listed out of level order on purpose: assembly groups them.
+    skills: {
+      heading: { en: "Skills", cs: "Dovednosti" },
+      levels: {
+        daily: { en: "Use daily", cs: "Používám denně" },
+        experienced: { en: "Have experience with", cs: "Mám zkušenost" },
+        learning: { en: "Learning", cs: "Učím se" },
+      },
+      items: [
+        { id: "css", name: "CSS", level: "experienced" as const },
+        { id: "react", name: "React", level: "daily" as const },
+        { id: "rust", name: "Rust", level: "learning" as const },
+        { id: "typescript", name: "TypeScript", level: "daily" as const },
+      ],
+    },
     ui: {
       toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
       switchLanguage: { en: "Čeština", cs: "English" },
       ongoing: { en: "present", cs: "dosud" },
+      skills: {
+        projects: { en: "Projects", cs: "Projekty" },
+        noProjects: { en: "No Project yet", cs: "Zatím bez projektu" },
+      },
       caseStudy: {
         context: { en: "Context", cs: "Kontext" },
         role: { en: "Role", cs: "Role" },

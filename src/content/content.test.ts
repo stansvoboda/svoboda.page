@@ -137,6 +137,70 @@ describe("assembleContent: Timeline", () => {
   })
 })
 
+describe("assembleContent: Skills", () => {
+  it("groups Skills by level, use daily first, in the requested locale", () => {
+    const { skills } = assembleContent(validContent(), "cs")
+
+    expect(skills.heading).toBe("Dovednosti")
+    expect(
+      skills.groups.map((g) => ({
+        level: g.level,
+        heading: g.heading,
+        skills: g.skills.map((s) => s.name),
+      }))
+    ).toEqual([
+      {
+        level: "daily",
+        heading: "Používám denně",
+        skills: ["React", "TypeScript"],
+      },
+      { level: "experienced", heading: "Mám zkušenost", skills: ["CSS"] },
+      { level: "learning", heading: "Učím se", skills: ["Rust"] },
+    ])
+  })
+
+  it("lists for each Skill the Projects that use it, in Timeline order", () => {
+    const { skills } = assembleContent(validContent(), "cs")
+    const projectsOf = (id: string) =>
+      skills.groups
+        .flatMap((g) => g.skills)
+        .find((s) => s.id === id)
+        ?.projects.map((p) => p.name)
+
+    expect(projectsOf("react")).toEqual(["Úkolníček", "Obchod"])
+    expect(projectsOf("typescript")).toEqual(["Obchod"])
+    expect(projectsOf("css")).toEqual(["Úkolníček"])
+  })
+
+  it("keeps a Skill no Project uses yet, with no Projects", () => {
+    const { skills } = assembleContent(validContent(), "en")
+
+    const learning = skills.groups.find((g) => g.level === "learning")
+
+    expect(learning?.skills).toEqual([
+      { id: "rust", name: "Rust", level: "learning", projects: [] },
+    ])
+  })
+
+  it("rejects a Project technology that is not a defined Skill", () => {
+    const raw = validContent()
+    raw.timeline.projects[1].technologies = ["typescript", "reakt"]
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      'timeline.projects.1.technologies.1: no Skill with id "reakt"'
+    )
+  })
+
+  it("rejects two Skills with the same id", () => {
+    const raw = validContent()
+    raw.skills.items[3].id = "react"
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      'skills.items.3.id: id "react" is already used by another Skill'
+    )
+  })
+})
+
 describe("findCaseStudy", () => {
   it("finds a Project by slug, together with its Milestone", () => {
     const content = assembleContent(validContent(), "cs")
@@ -157,6 +221,17 @@ describe("findCaseStudy", () => {
     expect(project.caseStudy.ai).toBe("AI psala testy.")
     expect(project.screenshots).toEqual([
       { src: "/projects/todo-app-list.png", alt: "Seznam úkolů" },
+    ])
+  })
+
+  it("returns the Project's technologies as the Skills they refer to", () => {
+    const content = assembleContent(validContent(), "en")
+
+    const { project } = findCaseStudy(content, "shop")!
+
+    expect(project.technologies).toEqual([
+      { id: "typescript", name: "TypeScript" },
+      { id: "react", name: "React" },
     ])
   })
 

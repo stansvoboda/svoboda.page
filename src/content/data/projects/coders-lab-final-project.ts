@@ -9,7 +9,7 @@ export const codersLabFinalProject = {
     en: "Placeholder for the course's final project.",
     cs: "Zástupný text pro závěrečný projekt kurzu.",
   },
-  technologies: ["React", "JavaScript", "SCSS"],
+  technologies: ["react", "javascript", "scss"],
   featured: false,
   thumbnail: "/projects/placeholder.svg",
   screenshots: [],

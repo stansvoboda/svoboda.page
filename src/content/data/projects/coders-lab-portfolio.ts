@@ -9,7 +9,7 @@ export const codersLabPortfolio = {
     en: "Placeholder for a static portfolio page from the course.",
     cs: "Zástupný text pro statickou stránku portfolia z kurzu.",
   },
-  technologies: ["HTML", "CSS"],
+  technologies: ["html", "css"],
   featured: false,
   thumbnail: "/projects/placeholder.svg",
   screenshots: [],

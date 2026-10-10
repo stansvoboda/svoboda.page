@@ -33,10 +33,10 @@ export function ProjectCard({
         <ul className="flex flex-wrap gap-1.5">
           {project.technologies.map((technology) => (
             <li
-              key={technology}
+              key={technology.id}
               className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs"
             >
-              {technology}
+              {technology.name}
             </li>
           ))}
         </ul>

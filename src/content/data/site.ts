@@ -1,4 +1,5 @@
 import type { RawContent } from "../schema"
+import { skills } from "./skills"
 import { timeline } from "./timeline"
 
 // The site's own text. Pages never import this file; they get it assembled
@@ -34,10 +35,18 @@ export const site = {
     githubLink: { en: "GitHub", cs: "GitHubu" },
   },
   timeline,
+  skills,
   ui: {
     toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
     switchLanguage: { en: "Čeština", cs: "English" },
     ongoing: { en: "present", cs: "dosud" },
+    skills: {
+      projects: { en: "Projects", cs: "Projekty" },
+      noProjects: {
+        en: "Not in a Project yet",
+        cs: "Zatím v žádném projektu",
+      },
+    },
     caseStudy: {
       context: { en: "Context and problem", cs: "Kontext a problém" },
       role: { en: "My role and stack", cs: "Moje role a technologie" },

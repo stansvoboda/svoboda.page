@@ -7,8 +7,9 @@ import { svobodaPage } from "./projects/svoboda-page"
 // the Projects are placeholders except this site itself.
 //
 // To add a Project: copy a file in ./projects/, change it (the id of its
-// Milestone, its Case Study), add it to `projects` below and put its
-// thumbnail in public/projects/<slug>.svg.
+// Milestone, its technologies as ids of Skills from ./skills.ts, its Case
+// Study), add it to `projects` below and put its thumbnail in
+// public/projects/<slug>.svg.
 export const timeline = {
   heading: { en: "My path", cs: "Moje cesta" },
   milestones: [

@@ -1,5 +1,5 @@
 import { site } from "./data/site"
-import { contentSchema, defaultLocale, locales } from "./schema"
+import { contentSchema, defaultLocale, locales, skillLevels } from "./schema"
 import type { Locale, Localized } from "./schema"
 
 export { defaultLocale, locales }
@@ -14,15 +14,32 @@ type InLocale<T> = T extends Localized
 
 type ContentInLocale = InLocale<ReturnType<typeof contentSchema.parse>>
 
-export type Project = ContentInLocale["timeline"]["projects"][number]
+type WrittenProject = ContentInLocale["timeline"]["projects"][number]
+type WrittenSkill = ContentInLocale["skills"]["items"][number]
+
+// A Project's technologies are written as Skill ids; pages get the Skills'
+// names to show.
+export type Project = Omit<WrittenProject, "technologies"> & {
+  technologies: Pick<WrittenSkill, "id" | "name">[]
+}
 export type Milestone = ContentInLocale["timeline"]["milestones"][number] & {
   projects: Project[]
 }
 
+// A Skill with the Projects that prove it. The Projects are derived from the
+// Projects' technologies, never written by hand.
+export type Skill = WrittenSkill & {
+  projects: Project[]
+}
+export type SkillLevel = Skill["level"]
+export type SkillGroup = { level: SkillLevel; heading: string; skills: Skill[] }
+
 // The content of one locale as pages read it. Milestones and Projects are
 // written as two flat lists; pages get them joined into the Timeline.
-export type Content = Omit<ContentInLocale, "timeline"> & {
+// Skills are written as one list; pages get them grouped by level.
+export type Content = Omit<ContentInLocale, "timeline" | "skills"> & {
   timeline: { heading: string; milestones: Milestone[] }
+  skills: { heading: string; groups: SkillGroup[] }
 }
 
 export class ContentError extends Error {
@@ -67,7 +84,13 @@ export function assembleContent(raw: unknown, locale: Locale): Content {
     throw new ContentError(`Content is invalid:\n${problems.join("\n")}`)
   }
   const inLocale = pickLocale(result.data, locale) as ContentInLocale
-  return { ...inLocale, timeline: buildTimeline(inLocale.timeline) }
+  const timeline = buildTimeline(inLocale.timeline, inLocale.skills.items)
+  const projects = timeline.milestones.flatMap((m) => m.projects)
+  return {
+    ...inLocale,
+    timeline,
+    skills: groupSkills(inLocale.skills, projects),
+  }
 }
 
 // An ongoing Milestone has no end; it sorts as if it ended in the future.
@@ -75,11 +98,16 @@ const ongoing = "9999-12"
 
 // Milestones from oldest to newest, each holding its Projects in the order
 // they were written.
-function buildTimeline({
-  heading,
-  milestones,
-  projects,
-}: ContentInLocale["timeline"]): Content["timeline"] {
+function buildTimeline(
+  { heading, milestones, projects }: ContentInLocale["timeline"],
+  skills: WrittenSkill[]
+): Content["timeline"] {
+  // Validation has checked that every technology is a Skill's id.
+  const skillsById = new Map(skills.map(({ id, name }) => [id, { id, name }]))
+  const withSkills = projects.map((project) => ({
+    ...project,
+    technologies: project.technologies.map((id) => skillsById.get(id)!),
+  }))
   const sorted = milestones.toSorted(
     (a, b) =>
       a.start.localeCompare(b.start) ||
@@ -89,7 +117,30 @@ function buildTimeline({
     heading,
     milestones: sorted.map((milestone) => ({
       ...milestone,
-      projects: projects.filter((p) => p.milestone === milestone.id),
+      projects: withSkills.filter((p) => p.milestone === milestone.id),
+    })),
+  }
+}
+
+// Skills grouped by level, use daily first, each group in the order its
+// Skills were written. Each Skill holds the Projects that use it, in
+// Timeline order.
+function groupSkills(
+  { heading, levels, items }: ContentInLocale["skills"],
+  projects: Project[]
+): Content["skills"] {
+  const skills = items.map((skill) => ({
+    ...skill,
+    projects: projects.filter((p) =>
+      p.technologies.some((t) => t.id === skill.id)
+    ),
+  }))
+  return {
+    heading,
+    groups: skillLevels.map((level) => ({
+      level,
+      heading: levels[level],
+      skills: skills.filter((s) => s.level === level),
     })),
   }
 }

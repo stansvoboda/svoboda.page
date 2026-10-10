@@ -70,6 +70,48 @@ describe("home page", () => {
     expect(within(bakery).queryByRole("list")).toBeNull()
   })
 
+  it("shows Skills grouped by level in the visitor's language", () => {
+    render(
+      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+    )
+
+    const skills = screen.getByRole("region", { name: "Dovednosti" })
+    expect(
+      within(skills)
+        .getAllByRole("heading", { level: 3 })
+        .map((h) => h.textContent)
+    ).toEqual(["Používám denně", "Mám zkušenost", "Učím se"])
+  })
+
+  it("shows how many and which Projects use each Skill, linking to them", () => {
+    render(
+      <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />
+    )
+
+    const skills = screen.getByRole("region", { name: "Dovednosti" })
+    const react = within(skills).getByRole("listitem", { name: "React" })
+    expect(within(react).getByText("Projekty: 2")).toBeDefined()
+    expect(
+      within(react)
+        .getAllByRole("link")
+        .map((a) => [a.textContent, a.getAttribute("href")])
+    ).toEqual([
+      ["Úkolníček", "/cs/projects/todo-app"],
+      ["Obchod", "/cs/projects/shop"],
+    ])
+  })
+
+  it("still shows a Skill no Project uses yet", () => {
+    render(
+      <HomePage locale="en" content={assembleContent(validContent(), "en")} />
+    )
+
+    const skills = screen.getByRole("region", { name: "Skills" })
+    const rust = within(skills).getByRole("listitem", { name: "Rust" })
+    expect(within(rust).getByText("No Project yet")).toBeDefined()
+    expect(within(rust).queryByRole("link")).toBeNull()
+  })
+
   it("shows each Project as a card linking to its Case Study", () => {
     const { container } = render(
       <HomePage locale="cs" content={assembleContent(validContent(), "cs")} />

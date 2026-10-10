@@ -9,7 +9,7 @@ export const svobodaPage = {
     en: "This site: a bilingual presentation built test-first with AI agents.",
     cs: "Tento web: dvojjazyčná prezentace postavená s AI agenty a testy napřed.",
   },
-  technologies: ["React", "TypeScript", "TanStack Start", "Tailwind CSS"],
+  technologies: ["react", "typescript", "tanstack-start", "tailwind-css"],
   featured: true,
   demo: "https://svoboda.page",
   repo: "https://github.com/stansvoboda/svoboda.page",

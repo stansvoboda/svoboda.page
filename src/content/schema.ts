@@ -75,95 +75,151 @@ const project = z.strictObject({
   caseStudy,
 })
 
+// The owner's self-assessment, in the order the Skills section shows it.
+export const skillLevels = ["daily", "experienced", "learning"] as const
+
+const skill = z.strictObject({
+  id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
+    error: "expected lowercase words joined by dashes",
+  }),
+  // A technology's own name reads the same in both languages: "React".
+  name: z.string().trim().min(1),
+  level: z.enum(skillLevels),
+})
+
 // The home page highlights two or three Featured Projects.
 const maxFeatured = 3
 
-export const contentSchema = z.strictObject({
-  meta: z.strictObject({
-    title: localized,
-  }),
-  intro: z.strictObject({
-    name: z.string().trim().min(1),
-    positioning: localized,
-    contactCta: localized,
-  }),
-  about: z.strictObject({
-    heading: localized,
-    text: localized,
-  }),
-  // Placeholder until the contact form exists: "<comingSoon> <githubLink>."
-  contact: z.strictObject({
-    heading: localized,
-    comingSoon: localized,
-    githubLink: localized,
-  }),
-  timeline: z
-    .strictObject({
+export const contentSchema = z
+  .strictObject({
+    meta: z.strictObject({
+      title: localized,
+    }),
+    intro: z.strictObject({
+      name: z.string().trim().min(1),
+      positioning: localized,
+      contactCta: localized,
+    }),
+    about: z.strictObject({
       heading: localized,
-      milestones: z.array(milestone),
-      projects: z.array(project),
-    })
-    .superRefine(({ milestones, projects }, ctx) => {
-      const milestoneIds = new Set(milestones.map((m) => m.id))
-      const slugs = new Set<string>()
-      projects.forEach((project, i) => {
-        if (slugs.has(project.slug)) {
+      text: localized,
+    }),
+    // Placeholder until the contact form exists: "<comingSoon> <githubLink>."
+    contact: z.strictObject({
+      heading: localized,
+      comingSoon: localized,
+      githubLink: localized,
+    }),
+    timeline: z
+      .strictObject({
+        heading: localized,
+        milestones: z.array(milestone),
+        projects: z.array(project),
+      })
+      .superRefine(({ milestones, projects }, ctx) => {
+        const milestoneIds = new Set(milestones.map((m) => m.id))
+        const slugs = new Set<string>()
+        projects.forEach((project, i) => {
+          if (slugs.has(project.slug)) {
+            ctx.addIssue({
+              code: "custom",
+              path: ["projects", i, "slug"],
+              message: `slug "${project.slug}" is already used by another Project`,
+            })
+          }
+          slugs.add(project.slug)
+          if (!milestoneIds.has(project.milestone)) {
+            ctx.addIssue({
+              code: "custom",
+              path: ["projects", i, "milestone"],
+              message: `no Milestone with id "${project.milestone}"`,
+            })
+          }
+        })
+        const featured = projects.filter((p) => p.featured).length
+        if (featured > maxFeatured) {
           ctx.addIssue({
             code: "custom",
-            path: ["projects", i, "slug"],
-            message: `slug "${project.slug}" is already used by another Project`,
+            path: ["projects"],
+            message: `${featured} Projects are featured, at most ${maxFeatured} may be`,
           })
         }
-        slugs.add(project.slug)
-        if (!milestoneIds.has(project.milestone)) {
+      }),
+    skills: z.strictObject({
+      heading: localized,
+      // The heading of each level's group.
+      levels: z.strictObject({
+        daily: localized,
+        experienced: localized,
+        learning: localized,
+      }),
+      items: z.array(skill).superRefine((items, ctx) => {
+        const ids = new Set<string>()
+        items.forEach((skill, i) => {
+          if (ids.has(skill.id)) {
+            ctx.addIssue({
+              code: "custom",
+              path: [i, "id"],
+              message: `id "${skill.id}" is already used by another Skill`,
+            })
+          }
+          ids.add(skill.id)
+        })
+      }),
+    }),
+    // Strings of the site's own interface (buttons, labels), not the owner's
+    // story. They follow the same both-languages rule.
+    ui: z.strictObject({
+      toggleTheme: localized,
+      // Text of the link to the other language, written in that language.
+      switchLanguage: localized,
+      // End of a Milestone that is still going on: "March 2024 – present".
+      ongoing: localized,
+      // Under each Skill: "Projects: 2", or a note that none uses it yet.
+      skills: z.strictObject({
+        projects: localized,
+        noProjects: localized,
+      }),
+      // Headings and links of a Case Study page.
+      caseStudy: z.strictObject({
+        context: localized,
+        role: localized,
+        decisions: localized,
+        challenge: localized,
+        result: localized,
+        ai: localized,
+        differently: localized,
+        screenshots: localized,
+        demo: localized,
+        repo: localized,
+        // Introduces the Milestone the Project belongs to: "Part of: …".
+        partOf: localized,
+        backToTimeline: localized,
+      }),
+      // The page for a URL with nothing behind it.
+      notFound: z.strictObject({
+        title: localized,
+        text: localized,
+        backHome: localized,
+      }),
+    }),
+  })
+  // A Project's technologies are ids of Skills, so the Skills section can
+  // show the Projects behind each Skill.
+  .superRefine(({ timeline, skills }, ctx) => {
+    const skillIds = new Set(skills.items.map((s) => s.id))
+    timeline.projects.forEach((project, i) => {
+      project.technologies.forEach((technology, j) => {
+        if (!skillIds.has(technology)) {
           ctx.addIssue({
             code: "custom",
-            path: ["projects", i, "milestone"],
-            message: `no Milestone with id "${project.milestone}"`,
+            path: ["timeline", "projects", i, "technologies", j],
+            message: `no Skill with id "${technology}"`,
           })
         }
       })
-      const featured = projects.filter((p) => p.featured).length
-      if (featured > maxFeatured) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["projects"],
-          message: `${featured} Projects are featured, at most ${maxFeatured} may be`,
-        })
-      }
-    }),
-  // Strings of the site's own interface (buttons, labels), not the owner's
-  // story. They follow the same both-languages rule.
-  ui: z.strictObject({
-    toggleTheme: localized,
-    // Text of the link to the other language, written in that language.
-    switchLanguage: localized,
-    // End of a Milestone that is still going on: "March 2024 – present".
-    ongoing: localized,
-    // Headings and links of a Case Study page.
-    caseStudy: z.strictObject({
-      context: localized,
-      role: localized,
-      decisions: localized,
-      challenge: localized,
-      result: localized,
-      ai: localized,
-      differently: localized,
-      screenshots: localized,
-      demo: localized,
-      repo: localized,
-      // Introduces the Milestone the Project belongs to: "Part of: …".
-      partOf: localized,
-      backToTimeline: localized,
-    }),
-    // The page for a URL with nothing behind it.
-    notFound: z.strictObject({
-      title: localized,
-      text: localized,
-      backHome: localized,
-    }),
-  }),
-})
+    })
+  })
 
 export type RawContent = z.input<typeof contentSchema>
 export type RawProject = RawContent["timeline"]["projects"][number]
