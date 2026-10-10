@@ -1,5 +1,5 @@
 import type { RawContent } from "../schema"
-import { codersLabFinalProject } from "./projects/coders-lab-final-project"
+import { parkHriste } from "./projects/park-hriste"
 import { codersLabPortfolio } from "./projects/coders-lab-portfolio"
 import { svobodaPage } from "./projects/svoboda-page"
 
@@ -45,8 +45,8 @@ export const timeline = {
         en: "An intensive course in HTML, CSS, JavaScript and React, finished with a final project.",
         cs: "Intenzivní kurz HTML, CSS, JavaScriptu a Reactu zakončený závěrečným projektem.",
       },
-      start: "2024-09",
-      end: "2025-03",
+      start: "2025-03",
+      end: "2025-08",
     },
     {
       id: "ai-coding-course",
@@ -64,5 +64,5 @@ export const timeline = {
     },
   ],
   // In the order they appear under their Milestone.
-  projects: [codersLabFinalProject, codersLabPortfolio, svobodaPage],
+  projects: [parkHriste, codersLabPortfolio, svobodaPage],
 } satisfies RawContent["timeline"]
