@@ -1,6 +1,12 @@
-import { Outlet, createFileRoute, notFound } from "@tanstack/react-router"
+import {
+  Outlet,
+  createFileRoute,
+  notFound,
+  rootRouteId,
+} from "@tanstack/react-router"
 
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { LocaleNotFoundPage } from "@/components/not-found-page"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { getContent, isLocale } from "@/content"
 
@@ -8,7 +14,8 @@ import { getContent, isLocale } from "@/content"
 export const Route = createFileRoute("/$locale")({
   loader: ({ params }) => {
     if (!isLocale(params.locale)) {
-      throw notFound()
+      // Without a locale there is no layout to show; the root's 404 takes it.
+      throw notFound({ routeId: rootRouteId })
     }
     return { locale: params.locale, content: getContent(params.locale) }
   },
@@ -20,6 +27,9 @@ export const Route = createFileRoute("/$locale")({
     ],
   }),
   component: LocaleLayout,
+  // A path under a locale that matches no page, like /en/whatever, shown
+  // inside the layout.
+  notFoundComponent: LocaleNotFoundPage,
 })
 
 function LocaleLayout() {

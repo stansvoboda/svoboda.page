@@ -94,8 +94,40 @@ function buildTimeline({
   }
 }
 
+// A Project's own page: the Project with the Milestone it belongs to.
+export type CaseStudy = { project: Project; milestone: Milestone }
+
+// The Case Study of the Project with this slug, or undefined if there is none.
+export function findCaseStudy(
+  content: Content,
+  slug: string
+): CaseStudy | undefined {
+  for (const milestone of content.timeline.milestones) {
+    const project = milestone.projects.find((p) => p.slug === slug)
+    if (project) {
+      return { project, milestone }
+    }
+  }
+  return undefined
+}
+
+// Every Project's slug, for prerendering a Case Study page per Project.
+export function listCaseStudySlugs(content: Content): string[] {
+  return content.timeline.milestones.flatMap((m) =>
+    m.projects.map((p) => p.slug)
+  )
+}
+
 // The real content in the repo, in one locale. Throws ContentError if any
 // translation is missing, which fails the prerender and so the build.
 export function getContent(locale: Locale): Content {
   return assembleContent(site, locale)
+}
+
+// The Case Study with this slug from the real content, or undefined.
+export function getCaseStudy(
+  locale: Locale,
+  slug: string
+): CaseStudy | undefined {
+  return findCaseStudy(getContent(locale), slug)
 }

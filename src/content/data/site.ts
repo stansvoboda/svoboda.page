@@ -38,5 +38,33 @@ export const site = {
     toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
     switchLanguage: { en: "Čeština", cs: "English" },
     ongoing: { en: "present", cs: "dosud" },
+    caseStudy: {
+      context: { en: "Context and problem", cs: "Kontext a problém" },
+      role: { en: "My role and stack", cs: "Moje role a technologie" },
+      decisions: { en: "Key decisions", cs: "Klíčová rozhodnutí" },
+      challenge: {
+        en: "A problem I hit and how I solved it",
+        cs: "Problém, na který jsem narazil, a jak jsem ho vyřešil",
+      },
+      result: { en: "Result", cs: "Výsledek" },
+      ai: { en: "How I used AI", cs: "Jak jsem využil AI" },
+      differently: {
+        en: "What I'd do differently",
+        cs: "Co bych příště udělal jinak",
+      },
+      screenshots: { en: "Screenshots", cs: "Snímky obrazovky" },
+      demo: { en: "Live demo", cs: "Živá ukázka" },
+      repo: { en: "Code on GitHub", cs: "Kód na GitHubu" },
+      partOf: { en: "Part of", cs: "Součást" },
+      backToTimeline: { en: "Back to my path", cs: "Zpět na moji cestu" },
+    },
+    notFound: {
+      title: { en: "Page not found", cs: "Stránka nenalezena" },
+      text: {
+        en: "There is nothing at this address. It may have moved, or the link has a typo.",
+        cs: "Na této adrese nic není. Možná se přesunula, nebo je v odkazu překlep.",
+      },
+      backHome: { en: "Go to the home page", cs: "Přejít na úvodní stránku" },
+    },
   },
 } satisfies RawContent

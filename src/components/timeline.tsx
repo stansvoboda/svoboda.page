@@ -25,7 +25,11 @@ export function Timeline({
   const headingId = useId()
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-8">
+    <section
+      id="timeline"
+      aria-labelledby={headingId}
+      className="flex flex-col gap-8"
+    >
       <h2 id={headingId} className="font-heading text-2xl font-semibold">
         {timeline.heading}
       </h2>

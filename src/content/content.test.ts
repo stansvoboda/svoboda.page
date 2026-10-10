@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest"
 
-import { ContentError, assembleContent } from "@/content"
+import {
+  ContentError,
+  assembleContent,
+  findCaseStudy,
+  listCaseStudySlugs,
+} from "@/content"
 import { validContent } from "@/test/content-fixture"
 
 describe("assembleContent", () => {
@@ -129,5 +134,63 @@ describe("assembleContent: Timeline", () => {
     expect(() => assembleContent(raw, "en")).toThrow(
       "timeline.projects: 4 Projects are featured, at most 3 may be"
     )
+  })
+})
+
+describe("findCaseStudy", () => {
+  it("finds a Project by slug, together with its Milestone", () => {
+    const content = assembleContent(validContent(), "cs")
+
+    const caseStudy = findCaseStudy(content, "shop")
+
+    expect(caseStudy?.project.name).toBe("Obchod")
+    expect(caseStudy?.milestone.id).toBe("freelance")
+    expect(caseStudy?.milestone.title).toBe("Na volné noze")
+  })
+
+  it("returns the Case Study's sections and screenshots in the requested locale", () => {
+    const content = assembleContent(validContent(), "cs")
+
+    const { project } = findCaseStudy(content, "todo-app")!
+
+    expect(project.caseStudy.decisions).toBe("Jen lokálně.")
+    expect(project.caseStudy.ai).toBe("AI psala testy.")
+    expect(project.screenshots).toEqual([
+      { src: "/projects/todo-app-list.png", alt: "Seznam úkolů" },
+    ])
+  })
+
+  it("rejects a Case Study section missing a translation, naming the field", () => {
+    const raw = validContent()
+    // @ts-expect-error simulating an author forgetting a translation
+    delete raw.timeline.projects[1].caseStudy.challenge.cs
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "timeline.projects.1.caseStudy.challenge.cs: missing Czech (cs) text"
+    )
+  })
+
+  it("rejects a Project without a Case Study", () => {
+    const raw = validContent()
+    // @ts-expect-error simulating an author leaving out the Case Study
+    delete raw.timeline.projects[0].caseStudy
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      /timeline\.projects\.0\.caseStudy: /
+    )
+  })
+
+  it("returns nothing for an unknown slug", () => {
+    const content = assembleContent(validContent(), "en")
+
+    expect(findCaseStudy(content, "no-such-project")).toBeUndefined()
+  })
+})
+
+describe("listCaseStudySlugs", () => {
+  it("lists the slug of every Project, in Timeline order", () => {
+    const content = assembleContent(validContent(), "en")
+
+    expect(listCaseStudySlugs(content)).toEqual(["todo-app", "shop"])
   })
 })

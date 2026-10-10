@@ -4,35 +4,29 @@ import tailwindcss from "@tailwindcss/vite"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
 import react from "@vitejs/plugin-react"
 import { defineConfig, runnerImport } from "vite"
-import type { Plugin } from "vite"
 
 type ContentModule = {
   locales: readonly string[]
   getContent: (locale: string) => unknown
+  listCaseStudySlugs: (content: unknown) => string[]
 }
 
-// Fails the build up front when a translation is missing (ADR 0002), with the
-// content module's message naming the field. Without it the build still
-// fails, but only as an opaque error from prerendering the broken page.
-function validateContent(): Plugin {
-  return {
-    name: "validate-content",
-    apply: "build",
-    async buildStart() {
-      const { module } = await runnerImport<ContentModule>(
-        "./src/content/index.ts"
-      )
-      for (const locale of module.locales) {
-        module.getContent(locale)
-      }
-    },
-  }
+// The Case Study page of every Project in both locales, for prerendering.
+// Reading the content also validates it, so a missing translation (ADR 0002)
+// fails the build up front with the content module's message naming the
+// field, instead of an opaque error from prerendering the broken page.
+async function caseStudyPages() {
+  const { module } = await runnerImport<ContentModule>("./src/content/index.ts")
+  return module.locales.flatMap((locale) =>
+    module
+      .listCaseStudySlugs(module.getContent(locale))
+      .map((slug) => ({ path: `/${locale}/projects/${slug}` }))
+  )
 }
 
 // https://tanstack.com/start/latest/docs/framework/react/guide/hosting
-export default defineConfig({
+export default defineConfig(async ({ command }) => ({
   plugins: [
-    validateContent(),
     cloudflare({ viteEnvironment: { name: "ssr" } }),
     tanstackStart({
       // "/" only redirects to "/en", so the Worker serves it instead of a
@@ -41,6 +35,8 @@ export default defineConfig({
         { path: "/", prerender: { enabled: false } },
         { path: "/en" },
         { path: "/cs" },
+        // Only the build prerenders; dev renders pages on request.
+        ...(command === "build" ? await caseStudyPages() : []),
       ],
       prerender: {
         enabled: true,
@@ -49,10 +45,8 @@ export default defineConfig({
         // Write en.html rather than en/index.html, so Cloudflare serves /en
         // as is instead of redirecting it to /en/.
         autoSubfolderIndex: false,
-        // Project cards already link to Case Study pages, which ticket #7
-        // builds. Until then those links would 404 and fail the build.
-        // TODO(#7): remove this filter.
-        filter: ({ path }) => !/^\/(en|cs)\/projects\//.test(path),
+        // A link to a section, like /en#timeline, is a page already crawled.
+        filter: ({ path }) => !path.includes("#"),
       },
     }),
     react(),
@@ -63,4 +57,4 @@ export default defineConfig({
       "@": resolve(import.meta.dirname, "./src"),
     },
   },
-})
+}))

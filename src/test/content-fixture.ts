@@ -59,6 +59,24 @@ export function validContent() {
           featured: true,
           repo: "https://github.com/example/todo-app",
           thumbnail: "/projects/todo-app.svg",
+          screenshots: [
+            {
+              src: "/projects/todo-app-list.png",
+              alt: { en: "The task list", cs: "Seznam úkolů" },
+            },
+          ],
+          caseStudy: {
+            context: { en: "I forgot tasks.", cs: "Zapomínala jsem úkoly." },
+            role: { en: "Everything, in React.", cs: "Všechno, v Reactu." },
+            decisions: { en: "Kept it local.", cs: "Jen lokálně." },
+            challenge: {
+              en: "Lost data on reload; saved it.",
+              cs: "Po obnovení zmizela data; ukládám je.",
+            },
+            result: { en: "I use it daily.", cs: "Používám ho denně." },
+            ai: { en: "AI wrote the tests.", cs: "AI psala testy." },
+            differently: { en: "Add sync.", cs: "Přidat synchronizaci." },
+          },
         },
         {
           slug: "shop",
@@ -69,6 +87,22 @@ export function validContent() {
           featured: false,
           demo: "https://shop.example.com",
           thumbnail: "/projects/shop.svg",
+          screenshots: [],
+          caseStudy: {
+            context: { en: "Bread sold out.", cs: "Chleba došel." },
+            role: { en: "Sole developer.", cs: "Jediná vývojářka." },
+            decisions: { en: "Static pages.", cs: "Statické stránky." },
+            challenge: {
+              en: "Slow images; resized.",
+              cs: "Pomalé obrázky; zmenšila jsem je.",
+            },
+            result: {
+              en: "Orders doubled.",
+              cs: "Objednávky se zdvojnásobily.",
+            },
+            ai: { en: "No AI.", cs: "Bez AI." },
+            differently: { en: "Start sooner.", cs: "Začít dřív." },
+          },
         },
       ],
     },
@@ -76,6 +110,25 @@ export function validContent() {
       toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
       switchLanguage: { en: "Čeština", cs: "English" },
       ongoing: { en: "present", cs: "dosud" },
+      caseStudy: {
+        context: { en: "Context", cs: "Kontext" },
+        role: { en: "Role", cs: "Role" },
+        decisions: { en: "Decisions", cs: "Rozhodnutí" },
+        challenge: { en: "Challenge", cs: "Výzva" },
+        result: { en: "Result", cs: "Výsledek" },
+        ai: { en: "AI", cs: "AI" },
+        differently: { en: "Next time", cs: "Příště" },
+        screenshots: { en: "Screenshots", cs: "Snímky" },
+        demo: { en: "Demo", cs: "Ukázka" },
+        repo: { en: "Code", cs: "Kód" },
+        partOf: { en: "Part of", cs: "Součást" },
+        backToTimeline: { en: "Back to my path", cs: "Zpět na cestu" },
+      },
+      notFound: {
+        title: { en: "Not found", cs: "Nenalezeno" },
+        text: { en: "Nothing here.", cs: "Nic tu není." },
+        backHome: { en: "Home", cs: "Domů" },
+      },
     },
   }
 }

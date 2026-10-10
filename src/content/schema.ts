@@ -37,6 +37,26 @@ const milestone = z.strictObject({
   end: month.optional(),
 })
 
+// A path of an image in public/, like "/projects/<slug>.svg".
+const image = z.string().startsWith("/")
+
+// The story of a Project, problem → decisions → result. Every Project has
+// one with all its sections; for a small Project a section can be short.
+const caseStudy = z.strictObject({
+  // The context and the problem the Project solves.
+  context: localized,
+  // The owner's role and the stack used.
+  role: localized,
+  decisions: localized,
+  // A problem the owner hit and how they solved it.
+  challenge: localized,
+  result: localized,
+  // How AI was used.
+  ai: localized,
+  // What the owner would do differently next time.
+  differently: localized,
+})
+
 const project = z.strictObject({
   // Part of the Case Study URL: /en/projects/<slug>.
   slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
@@ -50,8 +70,9 @@ const project = z.strictObject({
   featured: z.boolean(),
   demo: z.url().optional(),
   repo: z.url().optional(),
-  // Path of an image in public/, like "/projects/<slug>.svg".
-  thumbnail: z.string().startsWith("/"),
+  thumbnail: image,
+  screenshots: z.array(z.strictObject({ src: image, alt: localized })),
+  caseStudy,
 })
 
 // The home page highlights two or three Featured Projects.
@@ -119,7 +140,30 @@ export const contentSchema = z.strictObject({
     switchLanguage: localized,
     // End of a Milestone that is still going on: "March 2024 – present".
     ongoing: localized,
+    // Headings and links of a Case Study page.
+    caseStudy: z.strictObject({
+      context: localized,
+      role: localized,
+      decisions: localized,
+      challenge: localized,
+      result: localized,
+      ai: localized,
+      differently: localized,
+      screenshots: localized,
+      demo: localized,
+      repo: localized,
+      // Introduces the Milestone the Project belongs to: "Part of: …".
+      partOf: localized,
+      backToTimeline: localized,
+    }),
+    // The page for a URL with nothing behind it.
+    notFound: z.strictObject({
+      title: localized,
+      text: localized,
+      backHome: localized,
+    }),
   }),
 })
 
 export type RawContent = z.input<typeof contentSchema>
+export type RawProject = RawContent["timeline"]["projects"][number]

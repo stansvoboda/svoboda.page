@@ -1,10 +1,14 @@
 import type { RawContent } from "../schema"
+import { codersLabFinalProject } from "./projects/coders-lab-final-project"
+import { codersLabPortfolio } from "./projects/coders-lab-portfolio"
+import { svobodaPage } from "./projects/svoboda-page"
 
 // The owner's path. Dates are placeholders until the owner confirms them, and
 // the Projects are placeholders except this site itself.
 //
-// To add a Project: append it to `projects` with the id of its Milestone and
-// put its thumbnail in public/projects/<slug>.svg.
+// To add a Project: copy a file in ./projects/, change it (the id of its
+// Milestone, its Case Study), add it to `projects` below and put its
+// thumbnail in public/projects/<slug>.svg.
 export const timeline = {
   heading: { en: "My path", cs: "Moje cesta" },
   milestones: [
@@ -58,44 +62,6 @@ export const timeline = {
       start: "2026-09",
     },
   ],
-  projects: [
-    {
-      slug: "coders-lab-final-project",
-      milestone: "coders-lab",
-      name: { en: "Final project", cs: "Závěrečný projekt" },
-      summary: {
-        en: "Placeholder for the course's final project.",
-        cs: "Zástupný text pro závěrečný projekt kurzu.",
-      },
-      technologies: ["React", "JavaScript", "SCSS"],
-      featured: false,
-      thumbnail: "/projects/placeholder.svg",
-    },
-    {
-      slug: "coders-lab-portfolio",
-      milestone: "coders-lab",
-      name: { en: "First portfolio", cs: "První portfolio" },
-      summary: {
-        en: "Placeholder for a static portfolio page from the course.",
-        cs: "Zástupný text pro statickou stránku portfolia z kurzu.",
-      },
-      technologies: ["HTML", "CSS"],
-      featured: false,
-      thumbnail: "/projects/placeholder.svg",
-    },
-    {
-      slug: "svoboda-page",
-      milestone: "ai-coding-course",
-      name: { en: "svoboda.page", cs: "svoboda.page" },
-      summary: {
-        en: "This site: a bilingual presentation built test-first with AI agents.",
-        cs: "Tento web: dvojjazyčná prezentace postavená s AI agenty a testy napřed.",
-      },
-      technologies: ["React", "TypeScript", "TanStack Start", "Tailwind CSS"],
-      featured: true,
-      demo: "https://svoboda.page",
-      repo: "https://github.com/stansvoboda/svoboda.page",
-      thumbnail: "/projects/placeholder.svg",
-    },
-  ],
+  // In the order they appear under their Milestone.
+  projects: [codersLabFinalProject, codersLabPortfolio, svobodaPage],
 } satisfies RawContent["timeline"]

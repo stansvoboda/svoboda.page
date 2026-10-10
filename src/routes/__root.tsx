@@ -7,8 +7,9 @@ import {
   useParams,
 } from "@tanstack/react-router"
 
+import { NotFoundPage } from "@/components/not-found-page"
 import { ThemeProvider } from "@/components/theme-provider"
-import { defaultLocale, isLocale } from "@/content"
+import { defaultLocale, getContent, isLocale } from "@/content"
 import appCss from "@/index.css?url"
 import { themeScript } from "@/lib/theme-script"
 
@@ -22,6 +23,8 @@ export const Route = createRootRoute({
     links: [{ rel: "stylesheet", href: appCss }],
   }),
   component: RootComponent,
+  // A URL outside any locale, like /xx: the 404 in the default locale.
+  notFoundComponent: RootNotFound,
 })
 
 function RootComponent() {
@@ -31,6 +34,17 @@ function RootComponent() {
         <Outlet />
       </ThemeProvider>
     </RootDocument>
+  )
+}
+
+function RootNotFound() {
+  return (
+    <div className="mx-auto flex min-h-svh max-w-3xl flex-col px-6 py-8">
+      <NotFoundPage
+        notFound={getContent(defaultLocale).ui.notFound}
+        locale={defaultLocale}
+      />
+    </div>
   )
 }
 
