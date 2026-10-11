@@ -51,6 +51,62 @@ export const site = {
   featuredProjects: {
     heading: { en: "Featured projects", cs: "Vybrané projekty" },
   },
+  aiWorkflow: {
+    heading: { en: "How I work with AI", cs: "Jak pracuji s AI" },
+    steps: [
+      {
+        title: { en: "Clarify", cs: "Ujasnit" },
+        text: {
+          en: "An AI agent grills me with questions until a rough idea becomes a clear spec.",
+          cs: "AI agent mě zasypává otázkami, dokud se z hrubého nápadu nestane jasné zadání.",
+        },
+        evidence: {
+          label: { en: "The spec of this site", cs: "Zadání tohoto webu" },
+          url: "https://github.com/stansvoboda/svoboda.page/issues/1",
+        },
+      },
+      {
+        title: { en: "Split", cs: "Rozdělit" },
+        text: {
+          en: "The spec becomes small, labelled issues, each one a change that can ship on its own.",
+          cs: "Zadání rozdělím na malé issues se štítky, každé je změna, která obstojí samostatně.",
+        },
+        evidence: {
+          label: { en: "The issue list", cs: "Seznam issues" },
+          url: "https://github.com/stansvoboda/svoboda.page/issues?q=is%3Aissue",
+        },
+      },
+      {
+        title: { en: "Implement", cs: "Implementovat" },
+        text: {
+          en: "An agent builds each issue test-first, one pull request per change.",
+          cs: "Agent postaví každé issue podle testů napsaných předem, jeden pull request na změnu.",
+        },
+        evidence: {
+          label: { en: "A pull request", cs: "Ukázkový pull request" },
+          url: "https://github.com/stansvoboda/svoboda.page/pull/30",
+        },
+      },
+      {
+        title: { en: "Review", cs: "Zkontrolovat" },
+        text: {
+          en: "I review the code, fix what I don't like and keep the decisions in my hands.",
+          cs: "Kód zkontroluji, opravím, co se mi nelíbí, a rozhodnutí si nechávám ve svých rukou.",
+        },
+        evidence: {
+          label: {
+            en: "A commit of review fixes",
+            cs: "Commit s opravami po review",
+          },
+          url: "https://github.com/stansvoboda/svoboda.page/commit/96350b7d1ccfb4e85b82ebbcc08a72dd166c2699",
+        },
+      },
+    ],
+    limits: {
+      en: "AI makes me faster, but it doesn't think for me: I understand every line before it ships.",
+      cs: "AI mě zrychluje, ale nemyslí za mě: každému řádku rozumím dřív, než jde ven.",
+    },
+  },
   timeline,
   skills,
   ui: {

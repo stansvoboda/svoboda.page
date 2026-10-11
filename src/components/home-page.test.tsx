@@ -104,6 +104,66 @@ describe("home page", () => {
     expect(screen.getByText("I like code.")).toBeDefined()
   })
 
+  it.each(["cs", "en"] as const)(
+    "shows how the owner works with AI right after About, each step linking to its evidence (%s)",
+    (locale) => {
+      render(homePage(locale))
+
+      const heading = locale === "cs" ? "Jak používám AI" : "How I use AI"
+      const section = screen.getByRole("region", { name: heading })
+      const about = screen
+        .getByRole("heading", {
+          level: 2,
+          name: locale === "cs" ? "O mně" : "About",
+        })
+        .closest("section")
+      expect(about?.nextElementSibling).toBe(section)
+
+      const steps = within(section).getAllByRole("listitem")
+      expect(
+        steps.map((step) => [
+          within(step).getByRole("heading", { level: 3 }).textContent,
+          within(step).getByRole("link").textContent,
+          within(step).getByRole("link").getAttribute("href"),
+        ])
+      ).toEqual(
+        locale === "cs"
+          ? [
+              [
+                "Plán",
+                "Ukázat plán",
+                "https://github.com/jane-doe/site/issues/1",
+              ],
+              [
+                "Stavba",
+                "Ukázat PR",
+                "https://github.com/jane-doe/site/pull/2",
+              ],
+            ]
+          : [
+              [
+                "Plan",
+                "See the plan",
+                "https://github.com/jane-doe/site/issues/1",
+              ],
+              ["Build", "See a PR", "https://github.com/jane-doe/site/pull/2"],
+            ]
+      )
+      expect(
+        within(steps[0]).getByText(
+          locale === "cs" ? "AI se mě ptá." : "AI asks me questions."
+        )
+      ).toBeDefined()
+    }
+  )
+
+  it("closes the AI section with an honest note on its limits", () => {
+    render(homePage("cs"))
+
+    const section = screen.getByRole("region", { name: "Jak používám AI" })
+    expect(within(section).getByText("Čtu každý řádek.")).toBeDefined()
+  })
+
   it("reserves an empty slot for the future Intro Video", () => {
     const { container } = render(homePage("en"))
 
