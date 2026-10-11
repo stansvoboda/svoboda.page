@@ -18,3 +18,23 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+  # Playwright in a real headless Chromium, against the e2e build. Only here,
+  # not in the Cloudflare build, which has no browser.
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      # The trace of a failed test: open it with `npx playwright show-trace`.
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/

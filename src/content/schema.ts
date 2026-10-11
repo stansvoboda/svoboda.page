@@ -266,8 +266,8 @@ export const contentSchema = z
       cv: z.strictObject({
         title: localized,
         open: localized,
-        // The button that opens the print dialog, to print or save as PDF.
-        print: localized,
+        // The link that downloads the CV as a PDF (npm run cv:pdf).
+        download: localized,
         backHome: localized,
         contact: localized,
         // The heading of the jobs: "Experience".

@@ -50,8 +50,9 @@ export default defineConfig(async ({ command }) => ({
         // Write en.html rather than en/index.html, so Cloudflare serves /en
         // as is instead of redirecting it to /en/.
         autoSubfolderIndex: false,
-        // A link to a section, like /en#timeline, is a page already crawled.
-        filter: ({ path }) => !path.includes("#"),
+        // A link to a section, like /en#timeline, is a page already crawled;
+        // the CV's PDF, /cv-en.pdf, is a file in public/, not a page.
+        filter: ({ path }) => !path.includes("#") && !path.endsWith(".pdf"),
       },
     }),
     react(),

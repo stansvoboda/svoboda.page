@@ -30,3 +30,7 @@ dist-ssr
 
 # The owner's source material for the content; only processed images are committed
 /notes/
+
+# Playwright
+/test-results/
+/playwright-report/

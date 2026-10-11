@@ -25,7 +25,9 @@ Live at [svoboda.page](https://svoboda.page).
   the messages.
 - [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/)
   counts visits without cookies, so there is no cookie banner.
-- [Vitest](https://vitest.dev) and Testing Library for tests.
+- [Vitest](https://vitest.dev) and Testing Library for tests;
+  [Playwright](https://playwright.dev) for end-to-end tests in a real browser
+  and for printing the CV to PDF.
 
 ## Design docs
 
@@ -53,13 +55,35 @@ Other commands:
 
 ```bash
 npm test           # run the Vitest tests once
+npm run test:e2e   # run the Playwright tests in a headless Chromium
 npm run typecheck  # check types
 npm run lint       # run ESLint
 npm run build      # production build, prerenders pages to static HTML
 npm run preview    # serve the production build in a local Cloudflare Worker
 ```
 
-CI runs typecheck, lint, test and build on every push and pull request.
+CI runs typecheck, lint, test and build on every push and pull request, and
+the Playwright tests next to them.
+
+### End-to-end tests
+
+`npm run test:e2e` builds the site in the `e2e` mode and serves it in a local
+Cloudflare Worker (`vite preview`), then runs the tests in
+[`e2e`](e2e) against it. Before the first run, download the browser:
+
+```bash
+npx playwright install chromium
+```
+
+The `e2e` build never sends a real email or uses the site's real Turnstile
+keys: it uses Cloudflare's Turnstile test keys (`.env.e2e`,
+`.dev.vars.example`), which always pass, and the local Worker only prints
+emails to the terminal. The test keys still load Turnstile's script from
+Cloudflare and check the token there, so the tests need the internet. It also
+leaves out Web Analytics, so test visits aren't counted.
+
+While a preview of the `e2e` build is already running on port 4173, a local
+run reuses it instead of building again.
 
 ## Editing content
 
@@ -144,6 +168,21 @@ Add it to `items` in
 [`src/content/data/skills.ts`](src/content/data/skills.ts) with a new `id`, its
 `name` and a `level`: `"daily"`, `"experienced"` or `"learning"`. The Skills
 section finds the Projects that use it from their `technologies`.
+
+## CV PDF
+
+The CV page, `/en/cv`, offers its PDF for download: `public/cv-en.pdf` and
+`public/cv-cs.pdf`. They are the CV page printed by Chromium, and the print
+stylesheet in [`src/index.css`](src/index.css) sets the page. After changing
+anything the CV shows, make them again and commit them:
+
+```bash
+npm run cv:pdf
+```
+
+Next to each PDF, the script stores a fingerprint of the CV page it printed
+(`public/cv-en.fingerprint`). The Playwright tests compare it with the page,
+so CI fails when the CV changed but its PDFs weren't made again.
 
 ## Search engines and link previews
 
