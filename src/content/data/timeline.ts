@@ -58,7 +58,7 @@ export const timeline = {
         en: "An intensive course in HTML, CSS, JavaScript and React, finished with a final project.",
         cs: "Intenzivní kurz HTML, CSS, JavaScriptu a Reactu zakončený závěrečným projektem.",
       },
-      start: "2025-03",
+      start: "2025-01",
       end: "2025-08",
     },
     {
