@@ -98,6 +98,7 @@ export function assembleContent(raw: unknown, locale: Locale): Content {
       projects: projects.filter((p) => p.featured),
     },
     timeline,
+    // Skills list their Projects in Timeline order, not as written.
     skills: groupSkills(
       inLocale.skills,
       timeline.milestones.flatMap((m) => m.projects)
