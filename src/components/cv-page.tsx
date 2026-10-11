@@ -39,6 +39,8 @@ export function CvPage({
           {intro.name}
         </h1>
         <p className="text-lg font-medium print:text-sm">{intro.positioning}</p>
+        {/* The Intro holds only the name and the role; the summary is the
+            About text, so the CV needs no text of its own. */}
         <p className="max-w-prose text-muted-foreground print:max-w-none">
           {about.text}
         </p>
