@@ -1,6 +1,5 @@
 import type { RawContent } from "../schema"
 import { parkHriste } from "./projects/park-hriste"
-import { codersLabPortfolio } from "./projects/coders-lab-portfolio"
 import { svobodaPage } from "./projects/svoboda-page"
 
 // The owner's path. Dates are years where only the year matters, months
@@ -59,7 +58,7 @@ export const timeline = {
         en: "An intensive course in HTML, CSS, JavaScript and React, finished with a final project.",
         cs: "Intenzivní kurz HTML, CSS, JavaScriptu a Reactu zakončený závěrečným projektem.",
       },
-      start: "2025-03",
+      start: "2025-01",
       end: "2025-08",
     },
     {
@@ -79,5 +78,5 @@ export const timeline = {
     },
   ],
   // In the order they appear under their Milestone.
-  projects: [parkHriste, codersLabPortfolio, svobodaPage],
+  projects: [parkHriste, svobodaPage],
 } satisfies RawContent["timeline"]
