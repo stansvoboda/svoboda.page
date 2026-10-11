@@ -33,6 +33,28 @@ export function validContent() {
     featuredProjects: {
       heading: { en: "Featured projects", cs: "Vybrané projekty" },
     },
+    aiWorkflow: {
+      heading: { en: "How I use AI", cs: "Jak používám AI" },
+      steps: [
+        {
+          title: { en: "Plan", cs: "Plán" },
+          text: { en: "AI asks me questions.", cs: "AI se mě ptá." },
+          evidence: {
+            label: { en: "See the plan", cs: "Ukázat plán" },
+            url: "https://github.com/jane-doe/site/issues/1",
+          },
+        },
+        {
+          title: { en: "Build", cs: "Stavba" },
+          text: { en: "AI writes the code.", cs: "AI píše kód." },
+          evidence: {
+            label: { en: "See a PR", cs: "Ukázat PR" },
+            url: "https://github.com/jane-doe/site/pull/2",
+          },
+        },
+      ],
+      limits: { en: "I read every line.", cs: "Čtu každý řádek." },
+    },
     // Milestones are listed out of order on purpose: assembly sorts them.
     timeline: {
       heading: { en: "My path", cs: "Moje cesta" },

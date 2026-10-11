@@ -130,6 +130,21 @@ export const contentSchema = z
     featuredProjects: z.strictObject({
       heading: localized,
     }),
+    // How the owner works with AI agents, after About: steps, each with a
+    // link to real evidence on GitHub, and an honest note on the limits.
+    aiWorkflow: z.strictObject({
+      heading: localized,
+      steps: z
+        .array(
+          z.strictObject({
+            title: localized,
+            text: localized,
+            evidence: z.strictObject({ label: localized, url: z.url() }),
+          })
+        )
+        .min(1),
+      limits: localized,
+    }),
     timeline: z
       .strictObject({
         heading: localized,

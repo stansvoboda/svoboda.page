@@ -1,4 +1,5 @@
 import { About } from "@/components/about"
+import { AiWorkflow } from "@/components/ai-workflow"
 import { Contact } from "@/components/contact"
 import type { SendContactMessage } from "@/components/contact"
 import { FeaturedProjects } from "@/components/featured-projects"
@@ -25,6 +26,7 @@ export function HomePage({
         locale={locale}
       />
       <About about={content.about} />
+      <AiWorkflow aiWorkflow={content.aiWorkflow} />
       <Timeline
         timeline={content.timeline}
         locale={locale}
