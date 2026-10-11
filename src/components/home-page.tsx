@@ -1,6 +1,7 @@
 import { About } from "@/components/about"
 import { Contact } from "@/components/contact"
 import type { SendContactMessage } from "@/components/contact"
+import { FeaturedProjects } from "@/components/featured-projects"
 import { Intro } from "@/components/intro"
 import { Skills } from "@/components/skills"
 import { Timeline } from "@/components/timeline"
@@ -19,6 +20,10 @@ export function HomePage({
   return (
     <main className="flex flex-col gap-24">
       <Intro intro={content.intro} />
+      <FeaturedProjects
+        featuredProjects={content.featuredProjects}
+        locale={locale}
+      />
       <About about={content.about} />
       <Timeline
         timeline={content.timeline}

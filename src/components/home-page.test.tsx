@@ -31,6 +31,79 @@ describe("home page", () => {
     ).toBe("#contact")
   })
 
+  it.each(["cs", "en"] as const)(
+    "shows the Featured Projects right after the Intro (%s)",
+    (locale) => {
+      render(homePage(locale))
+
+      const heading = locale === "cs" ? "Vybrané projekty" : "Featured projects"
+      const strip = screen.getByRole("region", { name: heading })
+      const intro = screen.getByRole("heading", { level: 1 }).closest("section")
+      expect(intro?.nextElementSibling).toBe(strip)
+    }
+  )
+
+  it("shows exactly the Featured Projects as cards, in content order", () => {
+    const raw = validContent()
+    raw.timeline.projects.reverse()
+    raw.timeline.projects[0].featured = true
+    raw.timeline.projects.push({
+      ...raw.timeline.projects[1],
+      slug: "blog",
+      name: { en: "Blog", cs: "Blog" },
+      featured: false,
+    })
+    render(
+      <HomePage
+        locale="en"
+        content={assembleContent(raw, "en")}
+        sendContactMessage={vi.fn()}
+      />
+    )
+
+    const strip = screen.getByRole("region", { name: "Featured projects" })
+    expect(within(strip).getAllByRole("article")).toHaveLength(2)
+    expect(
+      within(strip)
+        .getAllByRole("heading", { level: 3 })
+        .map((h) => h.textContent)
+    ).toEqual(["Shop", "Todo app"])
+    expect(
+      within(strip)
+        .getAllByRole("link")
+        .map((a) => [a.textContent, a.getAttribute("href")])
+    ).toEqual([
+      ["Shop", "/en/projects/shop"],
+      ["Todo app", "/en/projects/todo-app"],
+    ])
+  })
+
+  it("lays the Featured Projects out in a row on wide screens, stacked on narrow ones", () => {
+    render(homePage("en"))
+
+    const strip = screen.getByRole("region", { name: "Featured projects" })
+    // Tailwind's classes, since jsdom has no layout to measure.
+    const [list] = within(strip).getAllByRole("list")
+    expect(list.className).toContain("grid")
+    expect(list.className).toContain("sm:grid-cols-3")
+  })
+
+  it("leaves the Featured Projects out when no Project is featured", () => {
+    const raw = validContent()
+    raw.timeline.projects[0].featured = false
+    render(
+      <HomePage
+        locale="en"
+        content={assembleContent(raw, "en")}
+        sendContactMessage={vi.fn()}
+      />
+    )
+
+    expect(
+      screen.queryByRole("region", { name: "Featured projects" })
+    ).toBeNull()
+  })
+
   it("tells the owner's story in the About section", () => {
     render(homePage("en"))
 
@@ -145,9 +218,10 @@ describe("home page", () => {
   })
 
   it("shows each Project as a card linking to its Case Study", () => {
-    const { container } = render(homePage("cs"))
+    render(homePage("cs"))
 
-    const card = screen.getByRole("article", { name: "Úkolníček" })
+    const timeline = screen.getByRole("region", { name: "Moje cesta" })
+    const card = within(timeline).getByRole("article", { name: "Úkolníček" })
     expect(within(card).getByText("Drží úkoly.")).toBeDefined()
     expect(
       within(card)
@@ -157,9 +231,8 @@ describe("home page", () => {
     expect(
       within(card).getByRole("link", { name: "Úkolníček" }).getAttribute("href")
     ).toBe("/cs/projects/todo-app")
-    const thumbnail = container.querySelector(
-      "img[src='/projects/todo-app.svg']"
+    expect(card.querySelector("img")?.getAttribute("src")).toBe(
+      "/projects/todo-app.svg"
     )
-    expect(card.contains(thumbnail)).toBe(true)
   })
 })

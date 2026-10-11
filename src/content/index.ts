@@ -37,7 +37,12 @@ export type SkillGroup = { level: SkillLevel; heading: string; skills: Skill[] }
 // The content of one locale as pages read it. Milestones and Projects are
 // written as two flat lists; pages get them joined into the Timeline.
 // Skills are written as one list; pages get them grouped by level.
-export type Content = Omit<ContentInLocale, "timeline" | "skills"> & {
+// Featured Projects are marked on each Project; pages get them listed.
+export type Content = Omit<
+  ContentInLocale,
+  "featuredProjects" | "timeline" | "skills"
+> & {
+  featuredProjects: { heading: string; projects: Project[] }
   timeline: { heading: string; milestones: Milestone[] }
   skills: { heading: string; groups: SkillGroup[] }
 }
@@ -84,30 +89,45 @@ export function assembleContent(raw: unknown, locale: Locale): Content {
     throw new ContentError(`Content is invalid:\n${problems.join("\n")}`)
   }
   const inLocale = pickLocale(result.data, locale) as ContentInLocale
-  const timeline = buildTimeline(inLocale.timeline, inLocale.skills.items)
-  const projects = timeline.milestones.flatMap((m) => m.projects)
+  const projects = withSkills(inLocale.timeline.projects, inLocale.skills.items)
+  const timeline = buildTimeline(inLocale.timeline, projects)
   return {
     ...inLocale,
+    featuredProjects: {
+      heading: inLocale.featuredProjects.heading,
+      projects: projects.filter((p) => p.featured),
+    },
     timeline,
-    skills: groupSkills(inLocale.skills, projects),
+    skills: groupSkills(
+      inLocale.skills,
+      timeline.milestones.flatMap((m) => m.projects)
+    ),
   }
 }
 
 // An ongoing Milestone has no end; it sorts as if it ended in the future.
 const ongoing = "9999-12"
 
-// Milestones from oldest to newest, each holding its Projects in the order
-// they were written.
-function buildTimeline(
-  { heading, milestones, projects }: ContentInLocale["timeline"],
+// The Projects in the order they were written, each technology swapped for
+// the Skill it refers to.
+function withSkills(
+  projects: WrittenProject[],
   skills: WrittenSkill[]
-): Content["timeline"] {
+): Project[] {
   // Validation has checked that every technology is a Skill's id.
   const skillsById = new Map(skills.map(({ id, name }) => [id, { id, name }]))
-  const withSkills = projects.map((project) => ({
+  return projects.map((project) => ({
     ...project,
     technologies: project.technologies.map((id) => skillsById.get(id)!),
   }))
+}
+
+// Milestones from oldest to newest, each holding its Projects in the order
+// they were written.
+function buildTimeline(
+  { heading, milestones }: ContentInLocale["timeline"],
+  projects: Project[]
+): Content["timeline"] {
   const sorted = milestones.toSorted(
     (a, b) =>
       a.start.localeCompare(b.start) ||
@@ -117,7 +137,7 @@ function buildTimeline(
     heading,
     milestones: sorted.map((milestone) => ({
       ...milestone,
-      projects: withSkills.filter((p) => p.milestone === milestone.id),
+      projects: projects.filter((p) => p.milestone === milestone.id),
     })),
   }
 }

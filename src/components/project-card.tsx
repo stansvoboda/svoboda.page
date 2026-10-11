@@ -1,26 +1,43 @@
 import { useId } from "react"
 
 import type { Locale, Project } from "@/content"
+import { cn } from "@/lib/utils"
 
 export function ProjectCard({
   project,
   locale,
-}: Readonly<{ project: Project; locale: Locale }>) {
+  headingLevel = 4,
+  vertical = false,
+}: Readonly<{
+  project: Project
+  locale: Locale
+  // The level of the name's heading, one below the section holding the card.
+  headingLevel?: 3 | 4
+  // The thumbnail above the text at every width, for a narrow card.
+  vertical?: boolean
+}>) {
   const nameId = useId()
+  const Heading = `h${headingLevel}` as const
 
   return (
     <article
       aria-labelledby={nameId}
-      className="relative flex flex-col gap-3 overflow-hidden rounded-lg border bg-card p-4 transition-colors focus-within:border-primary hover:border-primary sm:flex-row"
+      className={cn(
+        "relative flex flex-col gap-3 overflow-hidden rounded-lg border bg-card p-4 transition-colors focus-within:border-primary hover:border-primary",
+        !vertical && "sm:flex-row"
+      )}
     >
       {/* Decorative: the name next to it already says what it shows. */}
       <img
         src={project.thumbnail}
         alt=""
-        className="aspect-video w-full rounded-md bg-muted object-cover sm:w-40"
+        className={cn(
+          "aspect-video w-full rounded-md bg-muted object-cover",
+          !vertical && "sm:w-40"
+        )}
       />
       <div className="flex flex-col gap-2">
-        <h4 id={nameId} className="font-heading font-semibold">
+        <Heading id={nameId} className="font-heading font-semibold">
           {/* The whole card is clickable through this link's ::after. */}
           <a
             href={`/${locale}/projects/${project.slug}`}
@@ -28,7 +45,7 @@ export function ProjectCard({
           >
             {project.name}
           </a>
-        </h4>
+        </Heading>
         <p className="text-sm text-muted-foreground">{project.summary}</p>
         <ul className="flex flex-wrap gap-1.5">
           {project.technologies.map((technology) => (
