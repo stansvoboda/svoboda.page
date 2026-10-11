@@ -10,7 +10,7 @@ export const parkHriste = {
     cs: "Můj závěrečný projekt z Coders Lab: mapa a seznam pražských parků a hřišť postavená na otevřených datech města.",
   },
   technologies: ["react", "javascript", "tailwind-css"],
-  featured: false,
+  featured: true,
   demo: "https://parkhriste2.pages.dev",
   repo: "https://github.com/stansvoboda/parkhriste2",
   thumbnail: "/projects/park-hriste-map.jpg",
