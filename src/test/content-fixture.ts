@@ -30,6 +30,9 @@ export function validContent() {
       linkedin: "https://www.linkedin.com/in/jane-doe",
       github: "https://github.com/jane-doe",
     },
+    featuredProjects: {
+      heading: { en: "Featured projects", cs: "Vybrané projekty" },
+    },
     // Milestones are listed out of order on purpose: assembly sorts them.
     timeline: {
       heading: { en: "My path", cs: "Moje cesta" },

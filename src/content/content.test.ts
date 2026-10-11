@@ -168,6 +168,29 @@ describe("assembleContent: Timeline", () => {
       "timeline.projects: 4 Projects are featured, at most 3 may be"
     )
   })
+
+  it("lists only the Featured Projects, in the order they were written", () => {
+    const raw = validContent()
+    raw.timeline.projects.reverse()
+    raw.timeline.projects.push({
+      ...raw.timeline.projects[0],
+      slug: "blog",
+      featured: false,
+    })
+    raw.timeline.projects[0].featured = true
+
+    const { featuredProjects } = assembleContent(raw, "cs")
+
+    expect(featuredProjects.heading).toBe("Vybrané projekty")
+    expect(featuredProjects.projects.map((p) => p.slug)).toEqual([
+      "shop",
+      "todo-app",
+    ])
+    expect(featuredProjects.projects[0].technologies).toEqual([
+      { id: "typescript", name: "TypeScript" },
+      { id: "react", name: "React" },
+    ])
+  })
 })
 
 describe("assembleContent: Skills", () => {

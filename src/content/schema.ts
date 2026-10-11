@@ -125,6 +125,11 @@ export const contentSchema = z
       linkedin: z.url(),
       github: z.url(),
     }),
+    // The strip of Featured Projects right after the Intro. Which Projects
+    // are featured is written on each Project.
+    featuredProjects: z.strictObject({
+      heading: localized,
+    }),
     timeline: z
       .strictObject({
         heading: localized,

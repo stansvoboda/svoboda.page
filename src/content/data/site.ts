@@ -48,6 +48,9 @@ export const site = {
     linkedin: "https://www.linkedin.com/in/svoboda-stanislav",
     github: "https://github.com/stansvoboda",
   },
+  featuredProjects: {
+    heading: { en: "Featured projects", cs: "Vybrané projekty" },
+  },
   timeline,
   skills,
   ui: {
