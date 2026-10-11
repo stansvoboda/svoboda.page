@@ -1,6 +1,5 @@
 import { render, screen, within } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it } from "vitest"
 
 import { CvPage } from "@/components/cv-page"
 import { assembleContent } from "@/content"
@@ -106,20 +105,20 @@ describe("CV page", () => {
     ).toEqual(["Čeština: Rodilá mluvčí", "Angličtina: Plynule"])
   })
 
-  it("opens the print dialog from the print button", async () => {
-    const print = vi.fn()
-    vi.stubGlobal("print", print)
-    render(cvPage("en"))
+  it("downloads the PDF of the CV in its language", () => {
+    render(cvPage("cs"))
 
-    await userEvent.click(screen.getByRole("button", { name: "Print" }))
-
-    expect(print).toHaveBeenCalledOnce()
+    const download = screen.getByRole("link", { name: "Stáhnout PDF" })
+    expect(download.getAttribute("href")).toBe("/cv-cs.pdf")
+    expect(download.hasAttribute("download")).toBe(true)
   })
 
-  it("keeps the print button and the way back out of the printout", () => {
+  it("keeps the download link and the way back out of the printout", () => {
     render(cvPage("en"))
 
-    const controls = screen.getByRole("button", { name: "Print" }).parentElement
+    const controls = screen.getByRole("link", {
+      name: "Download PDF",
+    }).parentElement
     expect(controls?.className).toContain("print:hidden")
     expect(within(controls!).getByRole("link", { name: /Back/ })).toBeDefined()
   })

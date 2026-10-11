@@ -1,6 +1,6 @@
 import { useId } from "react"
 
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import type { Content, Locale, Milestone } from "@/content"
 import { cn, textLinkClass } from "@/lib/utils"
 import { formatMilestoneDates } from "@/lib/milestone-dates"
@@ -32,7 +32,10 @@ export function CvPage({
           <span aria-hidden>← </span>
           {ui.cv.backHome}
         </a>
-        <Button onClick={() => window.print()}>{ui.cv.print}</Button>
+        {/* The PDF is the print of this page, made by npm run cv:pdf. */}
+        <a href={`/cv-${locale}.pdf`} download className={buttonVariants()}>
+          {ui.cv.download}
+        </a>
       </div>
       <header className="flex flex-col gap-3 print:gap-1.5">
         <h1 className="font-heading text-4xl font-semibold tracking-tight print:text-2xl">

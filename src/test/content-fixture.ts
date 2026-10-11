@@ -212,7 +212,7 @@ export function validContent() {
       cv: {
         title: { en: "CV", cs: "CV" },
         open: { en: "My CV", cs: "Moje CV" },
-        print: { en: "Print", cs: "Vytisknout" },
+        download: { en: "Download PDF", cs: "Stáhnout PDF" },
         backHome: { en: "Back", cs: "Zpět" },
         contact: { en: "Contact", cs: "Kontakt" },
         jobs: { en: "Experience", cs: "Praxe" },
