@@ -187,6 +187,15 @@ export const contentSchema = z
         })
       }),
     }),
+    // What the CV needs that the rest of the content doesn't hold. Its name,
+    // summary, contact, experience, education, Projects and Skills come from
+    // the Intro, About, Contact, Milestones, Projects and Skills, so the site
+    // and the CV never drift apart. The CV is public: no phone, no address.
+    cv: z.strictObject({
+      languages: z
+        .array(z.strictObject({ name: localized, level: localized }))
+        .min(1, { error: "list at least one language" }),
+    }),
     // Strings of the site's own interface (buttons, labels), not the owner's
     // story. They follow the same both-languages rule.
     ui: z.strictObject({
@@ -236,6 +245,20 @@ export const contentSchema = z
         failed: localized,
         // Introduces the email, LinkedIn and GitHub links after a failure.
         fallback: localized,
+      }),
+      // The CV page and the link to it from the home page. The CV's other
+      // headings are those of the home page's sections.
+      cv: z.strictObject({
+        title: localized,
+        open: localized,
+        // The button that opens the print dialog, to print or save as PDF.
+        print: localized,
+        backHome: localized,
+        contact: localized,
+        website: localized,
+        experience: localized,
+        education: localized,
+        languages: localized,
       }),
       // The page for a URL with nothing behind it.
       notFound: z.strictObject({

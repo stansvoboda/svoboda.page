@@ -31,6 +31,15 @@ describe("home page", () => {
     ).toBe("#contact")
   })
 
+  it.each(["cs", "en"] as const)("links to the CV (%s)", (locale) => {
+    render(homePage(locale))
+
+    const label = locale === "cs" ? "Moje CV" : "My CV"
+    expect(screen.getByRole("link", { name: label }).getAttribute("href")).toBe(
+      `/${locale}/cv`
+    )
+  })
+
   it.each(["cs", "en"] as const)(
     "shows the Featured Projects right after the Intro (%s)",
     (locale) => {

@@ -6,6 +6,7 @@ import {
   findCaseStudy,
   listCaseStudySlugs,
 } from "@/content"
+import type { RawContent } from "@/content"
 import { validContent } from "@/test/content-fixture"
 
 describe("assembleContent", () => {
@@ -323,5 +324,70 @@ describe("listCaseStudySlugs", () => {
     const content = assembleContent(validContent(), "en")
 
     expect(listCaseStudySlugs(content)).toEqual(["todo-app", "shop"])
+  })
+})
+
+describe("assembleContent: CV", () => {
+  it("takes experience from the job Milestones, newest first", () => {
+    const { cv } = assembleContent(validContent(), "cs")
+
+    expect(cv.experience.map((m) => m.title)).toEqual([
+      "Na volné noze",
+      "Pekařka",
+    ])
+  })
+
+  it("takes education from the course and learning Milestones, newest first", () => {
+    const raw = validContent()
+    // The fixture's Milestones are typed by their own kinds; any kind fits here.
+    const milestones: RawContent["timeline"]["milestones"] =
+      raw.timeline.milestones
+    milestones.push({
+      id: "self-study",
+      kind: "learning",
+      title: { en: "Self-study", cs: "Samostudium" },
+      description: { en: "Read books.", cs: "Četla jsem knihy." },
+      start: "2024-05",
+      end: "2024-06",
+    })
+
+    const { cv } = assembleContent(raw, "en")
+
+    expect(cv.education.map((m) => m.id)).toEqual(["self-study", "bootcamp"])
+  })
+
+  it("returns the languages in the requested locale, in the order written", () => {
+    const { cv } = assembleContent(validContent(), "cs")
+
+    expect(cv.languages).toEqual([
+      { name: "Čeština", level: "Rodilá mluvčí" },
+      { name: "Angličtina", level: "Plynule" },
+    ])
+  })
+
+  it("rejects a CV without any language", () => {
+    const raw = validContent()
+    raw.cv.languages = []
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "cv.languages: list at least one language"
+    )
+  })
+
+  it("rejects a language level missing a translation, naming the field", () => {
+    const raw = validContent()
+    // @ts-expect-error simulating an author forgetting a translation
+    delete raw.cv.languages[1].level.cs
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "cv.languages.1.level.cs: missing Czech (cs) text"
+    )
+  })
+
+  it("rejects a phone number in the contact, since the CV is public", () => {
+    const raw = validContent()
+    Object.assign(raw.contact, { phone: "+420 123 456 789" })
+
+    expect(() => assembleContent(raw, "en")).toThrow(/contact: .*"phone"/)
   })
 })

@@ -38,13 +38,18 @@ export type SkillGroup = { level: SkillLevel; heading: string; skills: Skill[] }
 // written as two flat lists; pages get them joined into the Timeline.
 // Skills are written as one list; pages get them grouped by level.
 // Featured Projects are marked on each Project; pages get them listed.
+// The CV's experience and education are the Milestones, newest first.
 export type Content = Omit<
   ContentInLocale,
-  "featuredProjects" | "timeline" | "skills"
+  "featuredProjects" | "timeline" | "skills" | "cv"
 > & {
   featuredProjects: { heading: string; projects: Project[] }
   timeline: { heading: string; milestones: Milestone[] }
   skills: { heading: string; groups: SkillGroup[] }
+  cv: ContentInLocale["cv"] & {
+    experience: Milestone[]
+    education: Milestone[]
+  }
 }
 
 export class ContentError extends Error {
@@ -103,6 +108,7 @@ export function assembleContent(raw: unknown, locale: Locale): Content {
       inLocale.skills,
       timeline.milestones.flatMap((m) => m.projects)
     ),
+    cv: buildCv(inLocale.cv, timeline.milestones),
   }
 }
 
@@ -163,6 +169,20 @@ function groupSkills(
       heading: levels[level],
       skills: skills.filter((s) => s.level === level),
     })),
+  }
+}
+
+// Jobs are the CV's experience; courses and learning periods its education.
+// A CV lists both newest first, the reverse of the Timeline.
+function buildCv(
+  cv: ContentInLocale["cv"],
+  milestones: Milestone[]
+): Content["cv"] {
+  const newestFirst = milestones.toReversed()
+  return {
+    ...cv,
+    experience: newestFirst.filter((m) => m.kind === "job"),
+    education: newestFirst.filter((m) => m.kind !== "job"),
   }
 }
 

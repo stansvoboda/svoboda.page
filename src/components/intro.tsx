@@ -1,5 +1,5 @@
 import { buttonVariants } from "@/components/ui/button"
-import type { Content } from "@/content"
+import type { Content, Locale } from "@/content"
 
 function initialsOf(name: string) {
   return name
@@ -8,7 +8,11 @@ function initialsOf(name: string) {
     .join("")
 }
 
-export function Intro({ intro }: Readonly<{ intro: Content["intro"] }>) {
+export function Intro({
+  intro,
+  locale,
+  cvLabel,
+}: Readonly<{ intro: Content["intro"]; locale: Locale; cvLabel: string }>) {
   return (
     <section className="flex flex-col items-start gap-6">
       {/* Placeholder until the owner's photo is ready; decorative, so screen
@@ -25,9 +29,17 @@ export function Intro({ intro }: Readonly<{ intro: Content["intro"] }>) {
       <p className="max-w-prose text-lg text-muted-foreground">
         {intro.positioning}
       </p>
-      <a href="#contact" className={buttonVariants({ size: "lg" })}>
-        {intro.contactCta}
-      </a>
+      <div className="flex flex-wrap gap-3">
+        <a href="#contact" className={buttonVariants({ size: "lg" })}>
+          {intro.contactCta}
+        </a>
+        <a
+          href={`/${locale}/cv`}
+          className={buttonVariants({ size: "lg", variant: "outline" })}
+        >
+          {cvLabel}
+        </a>
+      </div>
     </section>
   )
 }
