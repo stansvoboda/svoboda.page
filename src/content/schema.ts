@@ -188,7 +188,7 @@ export const contentSchema = z
       }),
     }),
     // What the CV needs that the rest of the content doesn't hold. Its name,
-    // summary, contact, experience, education, Projects and Skills come from
+    // summary, contact, jobs, education, Projects and Skills come from
     // the Intro, About, Contact, Milestones, Projects and Skills, so the site
     // and the CV never drift apart. The CV is public: no phone, no address.
     cv: z.strictObject({
@@ -255,7 +255,8 @@ export const contentSchema = z
         print: localized,
         backHome: localized,
         contact: localized,
-        experience: localized,
+        // The heading of the jobs: "Experience".
+        jobs: localized,
         education: localized,
         languages: localized,
       }),

@@ -57,8 +57,8 @@ export function CvPage({
         </ul>
       </CvSection>
       <MilestoneSection
-        heading={ui.cv.experience}
-        milestones={cv.experience}
+        heading={ui.cv.jobs}
+        milestones={cv.jobs}
         locale={locale}
         ongoingLabel={ui.ongoing}
       />

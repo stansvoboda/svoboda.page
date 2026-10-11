@@ -328,13 +328,10 @@ describe("listCaseStudySlugs", () => {
 })
 
 describe("assembleContent: CV", () => {
-  it("takes experience from the job Milestones, newest first", () => {
+  it("takes the jobs from the job Milestones, newest first", () => {
     const { cv } = assembleContent(validContent(), "cs")
 
-    expect(cv.experience.map((m) => m.title)).toEqual([
-      "Na volné noze",
-      "Pekařka",
-    ])
+    expect(cv.jobs.map((m) => m.title)).toEqual(["Na volné noze", "Pekařka"])
   })
 
   it("takes education from the course and learning Milestones, newest first", () => {

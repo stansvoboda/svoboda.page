@@ -40,20 +40,20 @@ describe("CV page", () => {
     ])
   })
 
-  it("shows the experience, newest first, with dates and organisation", () => {
+  it("shows the jobs, newest first, with dates and organisation", () => {
     render(cvPage("cs"))
 
-    const experience = screen.getByRole("region", { name: "Praxe" })
+    const jobs = screen.getByRole("region", { name: "Praxe" })
     expect(
-      within(experience)
+      within(jobs)
         .getAllByRole("heading", { level: 3 })
         .map((h) => h.textContent)
     ).toEqual(["Na volné noze", "Pekařka"])
-    const bakery = within(experience).getByRole("listitem", { name: "Pekařka" })
+    const bakery = within(jobs).getByRole("listitem", { name: "Pekařka" })
     expect(within(bakery).getByText("leden 2015 – srpen 2023")).toBeDefined()
     expect(within(bakery).getByText("Corner Bakery")).toBeDefined()
     expect(within(bakery).getByText("Pekla jsem chleba.")).toBeDefined()
-    const freelance = within(experience).getByRole("listitem", {
+    const freelance = within(jobs).getByRole("listitem", {
       name: "Na volné noze",
     })
     expect(within(freelance).getByText("březen 2024 – dosud")).toBeDefined()
