@@ -129,3 +129,23 @@
     @apply font-sans;
     }
 }
+/* Printing (the CV's print button): a clean A4 page. Paper is white
+   whatever theme the visitor chose, so the dark theme's colours are swapped
+   for the light ones. */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 15mm;
+  }
+  .dark {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.147 0.004 49.3);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.147 0.004 49.3);
+    --primary: oklch(0.514 0.222 16.935);
+    --muted: oklch(0.96 0.002 17.2);
+    --muted-foreground: oklch(0.547 0.021 43.1);
+    --border: oklch(0.922 0.005 34.3);
+    color-scheme: light;
+  }
+}

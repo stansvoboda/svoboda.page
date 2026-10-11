@@ -2,19 +2,7 @@ import { useId } from "react"
 
 import { ProjectCard } from "@/components/project-card"
 import type { Content, Locale, Milestone } from "@/content"
-
-// "2024-03" as "March 2024" / "březen 2024"; a year alone stays as it is.
-function formatDate(date: string, locale: Locale) {
-  const [year, monthNumber] = date.split("-").map(Number)
-  if (monthNumber === undefined) {
-    return date
-  }
-  return new Intl.DateTimeFormat(locale, {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(Date.UTC(year, monthNumber - 1))
-}
+import { formatMilestoneDates } from "@/lib/milestone-dates"
 
 export function Timeline({
   timeline,
@@ -56,10 +44,7 @@ function MilestoneItem({
   ongoingLabel,
 }: Readonly<{ milestone: Milestone; locale: Locale; ongoingLabel: string }>) {
   const titleId = useId()
-  const start = formatDate(milestone.start, locale)
-  const end = milestone.end ? formatDate(milestone.end, locale) : ongoingLabel
-  // A Milestone within one month or year, like a workshop, shows it once.
-  const dates = milestone.start === milestone.end ? start : `${start} – ${end}`
+  const dates = formatMilestoneDates(milestone, locale, ongoingLabel)
 
   return (
     <li aria-labelledby={titleId} className="relative flex flex-col gap-2">

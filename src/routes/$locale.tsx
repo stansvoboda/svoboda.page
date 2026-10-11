@@ -34,8 +34,9 @@ function LocaleLayout() {
   const { locale, content } = Route.useLoaderData()
 
   return (
-    <div className="mx-auto flex min-h-svh max-w-3xl flex-col gap-24 px-6 py-8">
-      <header className="flex justify-end gap-2">
+    // On paper only the page itself shows, edge to edge of the print margins.
+    <div className="mx-auto flex min-h-svh max-w-3xl flex-col gap-24 px-6 py-8 print:block print:min-h-0 print:max-w-none print:p-0">
+      <header className="flex justify-end gap-2 print:hidden">
         <LanguageSwitcher locale={locale} label={content.ui.switchLanguage} />
         <ThemeToggle label={content.ui.toggleTheme} />
       </header>

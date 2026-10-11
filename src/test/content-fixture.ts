@@ -157,6 +157,19 @@ export function validContent() {
         { id: "typescript", name: "TypeScript", level: "daily" as const },
       ],
     },
+    // What the CV needs that the rest of the content doesn't hold.
+    cv: {
+      languages: [
+        {
+          name: { en: "Czech", cs: "Čeština" },
+          level: { en: "Native", cs: "Rodilá mluvčí" },
+        },
+        {
+          name: { en: "English", cs: "Angličtina" },
+          level: { en: "Fluent", cs: "Plynule" },
+        },
+      ],
+    },
     ui: {
       toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
       switchLanguage: { en: "Čeština", cs: "English" },
@@ -195,6 +208,16 @@ export function validContent() {
         spam: { en: "Looks like spam.", cs: "Vypadá jako spam." },
         failed: { en: "Sending failed.", cs: "Odeslání selhalo." },
         fallback: { en: "Reach me here:", cs: "Najdete mě tu:" },
+      },
+      cv: {
+        title: { en: "CV", cs: "CV" },
+        open: { en: "My CV", cs: "Moje CV" },
+        print: { en: "Print", cs: "Vytisknout" },
+        backHome: { en: "Back", cs: "Zpět" },
+        contact: { en: "Contact", cs: "Kontakt" },
+        jobs: { en: "Experience", cs: "Praxe" },
+        education: { en: "Education", cs: "Vzdělání" },
+        languages: { en: "Languages", cs: "Jazyky" },
       },
       notFound: {
         title: { en: "Not found", cs: "Nenalezeno" },

@@ -109,6 +109,18 @@ export const site = {
   },
   timeline,
   skills,
+  cv: {
+    languages: [
+      {
+        name: { en: "Czech", cs: "Čeština" },
+        level: { en: "Native", cs: "Rodilý jazyk" },
+      },
+      {
+        name: { en: "English", cs: "Angličtina" },
+        level: { en: "Pre-intermediate", cs: "Mírně pokročilý" },
+      },
+    ],
+  },
   ui: {
     toggleTheme: { en: "Toggle theme", cs: "Přepnout motiv" },
     switchLanguage: { en: "Čeština", cs: "English" },
@@ -174,6 +186,19 @@ export const site = {
         en: "You can reach me directly:",
         cs: "Můžete mě kontaktovat přímo:",
       },
+    },
+    cv: {
+      title: { en: "CV", cs: "CV" },
+      open: { en: "View my CV", cs: "Zobrazit CV" },
+      print: {
+        en: "Print or save as PDF",
+        cs: "Vytisknout nebo uložit jako PDF",
+      },
+      backHome: { en: "Back to the home page", cs: "Zpět na úvodní stránku" },
+      contact: { en: "Contact", cs: "Kontakt" },
+      jobs: { en: "Experience", cs: "Praxe" },
+      education: { en: "Education and courses", cs: "Vzdělání a kurzy" },
+      languages: { en: "Languages", cs: "Jazyky" },
     },
     notFound: {
       title: { en: "Page not found", cs: "Stránka nenalezena" },

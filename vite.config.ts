@@ -36,6 +36,8 @@ export default defineConfig(async ({ command }) => ({
         { path: "/", prerender: { enabled: false } },
         { path: "/en" },
         { path: "/cs" },
+        { path: "/en/cv" },
+        { path: "/cs/cv" },
         // Only the build prerenders; dev renders pages on request.
         ...(command === "build"
           ? await validateContentAndListCaseStudyPages()

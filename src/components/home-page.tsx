@@ -20,7 +20,11 @@ export function HomePage({
 }>) {
   return (
     <main className="flex flex-col gap-24">
-      <Intro intro={content.intro} />
+      <Intro
+        intro={content.intro}
+        locale={locale}
+        cvLabel={content.ui.cv.open}
+      />
       <FeaturedProjects
         featuredProjects={content.featuredProjects}
         locale={locale}
