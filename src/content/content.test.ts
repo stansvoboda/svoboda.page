@@ -110,6 +110,30 @@ describe("assembleContent: Timeline", () => {
     expect(timeline.milestones[0].projects).toEqual([])
   })
 
+  it("accepts a Milestone dated by years only, sorted among dated months", () => {
+    const raw = validContent()
+    raw.timeline.milestones[2].start = "2015"
+    raw.timeline.milestones[2].end = "2023"
+
+    const { timeline } = assembleContent(raw, "en")
+
+    expect(timeline.milestones.map((m) => m.id)).toEqual([
+      "bakery",
+      "bootcamp",
+      "freelance",
+    ])
+    expect(timeline.milestones[0].start).toBe("2015")
+  })
+
+  it("rejects a Milestone date that is neither a year nor a month", () => {
+    const raw = validContent()
+    raw.timeline.milestones[2].start = "2015-13"
+
+    expect(() => assembleContent(raw, "en")).toThrow(
+      "timeline.milestones.2.start: expected a year as YYYY or a month as YYYY-MM"
+    )
+  })
+
   it("rejects a Project referencing an unknown Milestone", () => {
     const raw = validContent()
     raw.timeline.projects[1].milestone = "frelance"

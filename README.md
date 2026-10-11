@@ -94,8 +94,9 @@ period.
      title: { en: "Junior frontend developer", cs: "Junior frontend vývojář" },
      organisation: "Acme",       // optional
      description: { en: "…", cs: "…" },
-     start: "2026-11",           // YYYY-MM
-     // end: "2027-06",          // leave out while it is ongoing
+     start: "2026-11",           // a month, YYYY-MM, or a year, YYYY
+     // end: "2027-06",          // leave out while it is ongoing; the same
+                                 // as start for a one-month workshop
    },
    ```
 

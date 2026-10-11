@@ -27,3 +27,6 @@ dist-ssr
 .wrangler
 .tanstack
 .dev.vars
+
+# The owner's source material for the content; only processed images are committed
+/notes/
