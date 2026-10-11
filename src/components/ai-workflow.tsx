@@ -1,6 +1,7 @@
 import { useId } from "react"
 
 import type { Content } from "@/content"
+import { cn, textLinkClass } from "@/lib/utils"
 
 export function AiWorkflow({
   aiWorkflow,
@@ -13,8 +14,9 @@ export function AiWorkflow({
         {aiWorkflow.heading}
       </h2>
       <ol className="grid gap-6 sm:grid-cols-2">
+        {/* The steps are a fixed, ordered list with no ids of their own. */}
         {aiWorkflow.steps.map((step, i) => (
-          <li key={step.evidence.url} className="flex flex-col gap-2">
+          <li key={i} className="flex flex-col gap-2">
             {/* The list already tells screen readers the order. */}
             <span
               aria-hidden
@@ -26,7 +28,7 @@ export function AiWorkflow({
             <p className="max-w-prose text-muted-foreground">{step.text}</p>
             <a
               href={step.evidence.url}
-              className="w-fit text-sm font-medium text-primary underline underline-offset-4"
+              className={cn("w-fit text-sm", textLinkClass)}
             >
               {step.evidence.label}
             </a>

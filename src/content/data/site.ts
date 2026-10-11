@@ -69,7 +69,7 @@ export const site = {
         title: { en: "Split", cs: "Rozdělit" },
         text: {
           en: "The spec becomes small, labelled issues, each one a change that can ship on its own.",
-          cs: "Zadání rozdělím na malé issues se štítky, každé je změna, která obstojí samostatně.",
+          cs: "Zadání rozdělím na malé issues se štítky; každé je samostatná změna, kterou jde nasadit zvlášť.",
         },
         evidence: {
           label: { en: "The issue list", cs: "Seznam issues" },
@@ -80,7 +80,7 @@ export const site = {
         title: { en: "Implement", cs: "Implementovat" },
         text: {
           en: "An agent builds each issue test-first, one pull request per change.",
-          cs: "Agent postaví každé issue podle testů napsaných předem, jeden pull request na změnu.",
+          cs: "Agent naprogramuje každé issue metodou test-first, jeden pull request na každou změnu.",
         },
         evidence: {
           label: { en: "A pull request", cs: "Ukázkový pull request" },
@@ -104,7 +104,7 @@ export const site = {
     ],
     limits: {
       en: "AI makes me faster, but it doesn't think for me: I understand every line before it ships.",
-      cs: "AI mě zrychluje, ale nemyslí za mě: každému řádku rozumím dřív, než jde ven.",
+      cs: "AI mě zrychluje, ale nemyslí za mě: každému řádku rozumím dřív, než ho pustím ven.",
     },
   },
   timeline,
