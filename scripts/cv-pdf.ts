@@ -12,12 +12,15 @@ import {
   storeCvFingerprint,
 } from "../e2e/cv-fingerprint.ts"
 
-const server = await preview({ preview: { port: 4174, strictPort: true } })
+// Not Playwright's 4173, so a preview running for the e2e tests can stay.
+const port = 4174
+
+const server = await preview({ preview: { port, strictPort: true } })
 const browser = await chromium.launch()
 try {
   const page = await browser.newPage()
   for (const locale of locales) {
-    await page.goto(`http://localhost:4174/${locale}/cv`)
+    await page.goto(`http://localhost:${port}/${locale}/cv`)
     // The page's load doesn't wait for the web fonts; the PDF needs them.
     await page.evaluate(() => document.fonts.ready)
     // The print stylesheet (index.css) sets the A4 page and its margins.

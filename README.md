@@ -75,9 +75,11 @@ Cloudflare Worker (`vite preview`), then runs the tests in
 npx playwright install chromium
 ```
 
-The `e2e` build never touches the real Turnstile or sends a real email: it
-uses Cloudflare's Turnstile test keys (`.env.e2e`, `.dev.vars.example`), which
-always pass, and the local Worker only prints emails to the terminal. It also
+The `e2e` build never sends a real email or uses the site's real Turnstile
+keys: it uses Cloudflare's Turnstile test keys (`.env.e2e`,
+`.dev.vars.example`), which always pass, and the local Worker only prints
+emails to the terminal. The test keys still load Turnstile's script from
+Cloudflare and check the token there, so the tests need the internet. It also
 leaves out Web Analytics, so test visits aren't counted.
 
 While a preview of the `e2e` build is already running on port 4173, a local
