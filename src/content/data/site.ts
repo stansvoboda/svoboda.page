@@ -54,7 +54,6 @@ export const site = {
   timeline,
   skills,
   cv: {
-    // A first draft the owner may adjust.
     languages: [
       {
         name: { en: "Czech", cs: "Čeština" },
@@ -62,7 +61,7 @@ export const site = {
       },
       {
         name: { en: "English", cs: "Angličtina" },
-        level: { en: "Intermediate", cs: "Středně pokročilý" },
+        level: { en: "Pre-intermediate", cs: "Mírně pokročilý" },
       },
     ],
   },
