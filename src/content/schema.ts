@@ -18,10 +18,12 @@ const localized = z.strictObject({
 })
 export type Localized = z.infer<typeof localized>
 
-// A calendar month, "2024-03". Months sort correctly as plain strings.
-const month = z
-  .string()
-  .regex(/^\d{4}-(0[1-9]|1[0-2])$/, { error: "expected a month as YYYY-MM" })
+// A year, "2007", or a calendar month, "2024-03", for when only the year is
+// known or matters. Both sort as plain strings; a year sorts before the
+// months of that year.
+const date = z.string().regex(/^\d{4}(-(0[1-9]|1[0-2]))?$/, {
+  error: "expected a year as YYYY or a month as YYYY-MM",
+})
 
 export const milestoneKinds = ["job", "course", "learning"] as const
 
@@ -32,9 +34,9 @@ const milestone = z.strictObject({
   // Missing for work without one, like self-employment.
   organisation: z.string().trim().min(1).optional(),
   description: localized,
-  start: month,
+  start: date,
   // No end means the Milestone is ongoing.
-  end: month.optional(),
+  end: date.optional(),
 })
 
 // A path of an image in public/, like "/projects/<slug>.svg".

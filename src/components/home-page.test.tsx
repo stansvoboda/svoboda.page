@@ -73,6 +73,41 @@ describe("home page", () => {
     expect(within(bakery).queryByRole("list")).toBeNull()
   })
 
+  it("shows a Milestone dated by years only as plain years", () => {
+    const raw = validContent()
+    raw.timeline.milestones[2].start = "2015"
+    raw.timeline.milestones[2].end = "2023"
+    render(
+      <HomePage
+        locale="cs"
+        content={assembleContent(raw, "cs")}
+        sendContactMessage={vi.fn()}
+      />
+    )
+
+    const timeline = screen.getByRole("region", { name: "Moje cesta" })
+    const bakery = within(timeline).getByRole("listitem", { name: "Pekařka" })
+    expect(within(bakery).getByText("2015 – 2023")).toBeDefined()
+  })
+
+  it("shows a Milestone that started and ended in the same month once", () => {
+    const raw = validContent()
+    raw.timeline.milestones[0].start = "2024-02"
+    render(
+      <HomePage
+        locale="en"
+        content={assembleContent(raw, "en")}
+        sendContactMessage={vi.fn()}
+      />
+    )
+
+    const timeline = screen.getByRole("region", { name: "My path" })
+    const course = within(timeline).getByRole("listitem", {
+      name: "Frontend course",
+    })
+    expect(within(course).getByText("February 2024")).toBeDefined()
+  })
+
   it("shows Skills grouped by level in the visitor's language", () => {
     render(homePage("cs"))
 

@@ -3,9 +3,12 @@ import { useId } from "react"
 import { ProjectCard } from "@/components/project-card"
 import type { Content, Locale, Milestone } from "@/content"
 
-// "2024-03" as "March 2024" / "březen 2024".
-function formatMonth(month: string, locale: Locale) {
-  const [year, monthNumber] = month.split("-").map(Number)
+// "2024-03" as "March 2024" / "březen 2024"; a year alone stays as it is.
+function formatDate(date: string, locale: Locale) {
+  const [year, monthNumber] = date.split("-").map(Number)
+  if (monthNumber === undefined) {
+    return date
+  }
   return new Intl.DateTimeFormat(locale, {
     month: "long",
     year: "numeric",
@@ -53,7 +56,10 @@ function MilestoneItem({
   ongoingLabel,
 }: Readonly<{ milestone: Milestone; locale: Locale; ongoingLabel: string }>) {
   const titleId = useId()
-  const end = milestone.end ? formatMonth(milestone.end, locale) : ongoingLabel
+  const start = formatDate(milestone.start, locale)
+  const end = milestone.end ? formatDate(milestone.end, locale) : ongoingLabel
+  // A Milestone within one month or year, like a workshop, shows it once.
+  const dates = milestone.start === milestone.end ? start : `${start} – ${end}`
 
   return (
     <li aria-labelledby={titleId} className="relative flex flex-col gap-2">
@@ -62,9 +68,7 @@ function MilestoneItem({
         aria-hidden
         className="absolute top-2 -left-[calc(1.5rem+4.5px)] size-2 rounded-full bg-primary"
       />
-      <p className="text-sm text-muted-foreground">
-        {formatMonth(milestone.start, locale)} – {end}
-      </p>
+      <p className="text-sm text-muted-foreground">{dates}</p>
       <h3 id={titleId} className="font-heading text-lg font-semibold">
         {milestone.title}
       </h3>
