@@ -141,7 +141,6 @@ export const site = {
       },
       backHome: { en: "Back to the home page", cs: "Zpět na úvodní stránku" },
       contact: { en: "Contact", cs: "Kontakt" },
-      website: { en: "Website", cs: "Web" },
       experience: { en: "Experience", cs: "Praxe" },
       education: { en: "Education and courses", cs: "Vzdělání a kurzy" },
       languages: { en: "Languages", cs: "Jazyky" },

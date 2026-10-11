@@ -182,7 +182,9 @@ function buildCv(
   return {
     ...cv,
     experience: newestFirst.filter((m) => m.kind === "job"),
-    education: newestFirst.filter((m) => m.kind !== "job"),
+    education: newestFirst.filter(
+      (m) => m.kind === "course" || m.kind === "learning"
+    ),
   }
 }
 

@@ -193,7 +193,6 @@ export function validContent() {
         print: { en: "Print", cs: "Vytisknout" },
         backHome: { en: "Back", cs: "Zpět" },
         contact: { en: "Contact", cs: "Kontakt" },
-        website: { en: "Website", cs: "Web" },
         experience: { en: "Experience", cs: "Praxe" },
         education: { en: "Education", cs: "Vzdělání" },
         languages: { en: "Languages", cs: "Jazyky" },

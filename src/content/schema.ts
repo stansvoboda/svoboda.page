@@ -255,7 +255,6 @@ export const contentSchema = z
         print: localized,
         backHome: localized,
         contact: localized,
-        website: localized,
         experience: localized,
         education: localized,
         languages: localized,
