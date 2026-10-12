@@ -48,7 +48,7 @@ export function CaseStudyPage({
           {project.technologies.map((technology) => (
             <li
               key={technology.id}
-              className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs"
+              className="border border-foreground px-2 font-heading text-sm font-semibold tracking-wide uppercase"
             >
               {technology.name}
             </li>

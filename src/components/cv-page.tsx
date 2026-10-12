@@ -88,7 +88,7 @@ export function CvPage({
                       </a>
                     </h3>
                     <p className="text-muted-foreground">{project.summary}</p>
-                    <p className="font-mono text-xs print:text-[10px]">
+                    <p className="font-heading text-sm font-semibold tracking-wide uppercase print:text-[10px]">
                       {project.technologies.map((t) => t.name).join(", ")}
                     </p>
                   </>
