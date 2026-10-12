@@ -14,7 +14,7 @@ export function About({ about }: Readonly<{ about: Content["about"] }>) {
       >
         <SectionHeading>{about.heading}</SectionHeading>
         <div className="flex flex-col gap-8">
-          <p className="max-w-[34ch] text-2xl leading-snug font-medium sm:text-3xl">
+          <p className="slide-from-right max-w-[34ch] text-2xl leading-snug font-medium sm:text-3xl">
             {about.text}
           </p>
           {/* Reserved for the Intro Video, planned after the first release. It

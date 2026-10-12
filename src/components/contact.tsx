@@ -60,10 +60,10 @@ export function Contact({
       >
         <div className="flex flex-col gap-6 lg:pt-1">
           <SectionHeading id={headingId}>{contact.heading}</SectionHeading>
-          <p className="max-w-[28ch] text-2xl leading-snug font-medium sm:text-3xl">
+          <p className="slide-from-right max-w-[28ch] text-2xl leading-snug font-medium sm:text-3xl">
             {contact.text}
           </p>
-          <ContactLinks contact={contact} />
+          <ContactLinks contact={contact} className="slide-from-right" />
         </div>
         <ContactForm
           contact={contact}
@@ -132,7 +132,7 @@ function ContactForm({
   return (
     <form
       noValidate
-      className="flex max-w-xl flex-col gap-5"
+      className="slide-from-right flex max-w-xl flex-col gap-5"
       onSubmit={(event) => {
         event.preventDefault()
         void form.handleSubmit()
@@ -234,9 +234,17 @@ function OutcomeMessage({
   }
 }
 
-function ContactLinks({ contact }: Readonly<{ contact: Content["contact"] }>) {
+function ContactLinks({
+  contact,
+  className,
+}: Readonly<{ contact: Content["contact"]; className?: string }>) {
   return (
-    <ul className="flex flex-wrap gap-x-6 gap-y-2 text-lg font-semibold">
+    <ul
+      className={cn(
+        "flex flex-wrap gap-x-6 gap-y-2 text-lg font-semibold",
+        className
+      )}
+    >
       <li>
         <a href={`mailto:${contact.email}`} className={textLinkClass}>
           {contact.email}

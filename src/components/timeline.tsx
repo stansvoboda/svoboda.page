@@ -73,10 +73,10 @@ function MilestoneItem({
         )}
         <span className="station-dot absolute top-1 left-1/2 z-10 size-7 -translate-x-1/2 rounded-full border-4 border-foreground" />
       </div>
-      <p className="col-start-2 row-start-1 font-heading text-xl leading-tight font-bold tracking-wide text-balance uppercase tabular-nums sm:col-start-1 sm:text-right">
+      <p className="slide-from-right col-start-2 row-start-1 font-heading text-xl leading-tight font-bold tracking-wide text-balance uppercase tabular-nums sm:col-start-1 sm:text-right">
         {dates}
       </p>
-      <div className="col-start-2 row-start-2 mt-2 flex flex-col gap-2 sm:col-start-3 sm:row-start-1 sm:mt-0">
+      <div className="slide-from-right col-start-2 row-start-2 mt-2 flex flex-col gap-2 sm:col-start-3 sm:row-start-1 sm:mt-0">
         <h3
           id={titleId}
           className="font-heading text-3xl leading-none font-bold tracking-tight uppercase"

@@ -29,7 +29,7 @@ export function Skills({
             group.skills.length > 0 && (
               <div
                 key={group.level}
-                className="grid gap-6 border-t-4 border-foreground pt-4 lg:grid-cols-[13rem_1fr] lg:gap-10"
+                className="slide-from-right grid gap-6 border-t-4 border-foreground pt-4 lg:grid-cols-[13rem_1fr] lg:gap-10"
               >
                 <h3 className="font-heading text-3xl leading-none font-bold tracking-tight uppercase">
                   {group.heading}

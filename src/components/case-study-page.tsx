@@ -58,7 +58,14 @@ export function CaseStudyPage({
         {(project.demo || project.repo) && (
           <div className="flex flex-wrap gap-2">
             {project.demo && (
-              <a href={project.demo} className={buttonVariants()}>
+              // A new tab: the demo is another site, so this page stays
+              // open to come back to.
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener"
+                className={buttonVariants()}
+              >
                 {ui.caseStudy.demo}
               </a>
             )}

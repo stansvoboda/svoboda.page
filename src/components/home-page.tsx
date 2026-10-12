@@ -19,7 +19,9 @@ export function HomePage({
   sendContactMessage: SendContactMessage
 }>) {
   return (
-    <main>
+    // Content sliding in from the right must not widen the page. `clip`
+    // rather than `hidden`, so nothing inside becomes a scroll container.
+    <main className="overflow-x-clip">
       <Intro
         intro={content.intro}
         locale={locale}
