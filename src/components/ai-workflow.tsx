@@ -22,7 +22,7 @@ export function AiWorkflow({
             <li
               key={i}
               style={{ "--i": i } as CSSProperties}
-              className="relative flex flex-col gap-3 pl-16 lg:pt-16 lg:pl-0"
+              className="slide-from-right relative flex flex-col gap-3 pl-16 lg:pt-16 lg:pl-0"
             >
               {/* The list already tells screen readers the order. */}
               <span

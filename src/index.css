@@ -311,6 +311,12 @@
     scale: 1 1;
     }
 }
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    translate: var(--slide-x) 0;
+    }
+}
 @supports (animation-timeline: view()) {
   .nav-progress {
     display: block;
@@ -320,6 +326,21 @@
       transform-origin: left;
       animation: bar-grow linear both;
       animation-timeline: scroll(root block);
+      }
+    /* Section headings arrive from the left as they enter the screen, the
+       content below them from the right. The range is a fixed distance, so
+       a tall card settles as soon as a short heading does. */
+    .slide-from-left,
+    .slide-from-right {
+      animation: slide-in cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 12rem;
+      }
+    .slide-from-left {
+      --slide-x: -2.5rem;
+      }
+    .slide-from-right {
+      --slide-x: 2.5rem;
       }
     .station-dot {
       animation: station-lit linear both;

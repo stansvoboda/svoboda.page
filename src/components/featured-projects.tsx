@@ -25,7 +25,7 @@ export function FeaturedProjects({
         {/* One to three tickets share the row evenly, so two never leave a hole. */}
         <ul className="grid gap-6 sm:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
           {featuredProjects.projects.map((project) => (
-            <li key={project.slug}>
+            <li key={project.slug} className="slide-from-right">
               <ProjectCard
                 project={project}
                 locale={locale}

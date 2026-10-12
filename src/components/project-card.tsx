@@ -3,6 +3,9 @@ import { useId } from "react"
 import type { Locale, Project } from "@/content"
 import { cn } from "@/lib/utils"
 
+// A Project's technologies are written main ones first; a card shows these.
+const cardTechnologies = 4
+
 // A Project as a ticket: hard edge, the picture as its stub, and the whole
 // ticket lights up yellow when pointed at.
 export function ProjectCard({
@@ -57,7 +60,8 @@ export function ProjectCard({
           {project.summary}
         </p>
         <ul className="mt-1 flex flex-wrap gap-1.5">
-          {project.technologies.map((technology) => (
+          {/* Only the main ones; the Case Study lists them all. */}
+          {project.technologies.slice(0, cardTechnologies).map((technology) => (
             <li
               key={technology.id}
               className="border-2 border-current px-1.5 font-heading text-sm font-semibold tracking-wide uppercase"
