@@ -19,11 +19,13 @@ export function HomePage({
   sendContactMessage: SendContactMessage
 }>) {
   return (
-    <main className="flex flex-col gap-24">
+    <main>
       <Intro
         intro={content.intro}
         locale={locale}
         cvLabel={content.ui.cv.open}
+        milestones={content.timeline.milestones}
+        ongoingLabel={content.ui.ongoing}
       />
       <FeaturedProjects
         featuredProjects={content.featuredProjects}

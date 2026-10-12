@@ -91,7 +91,7 @@ describe("home page", () => {
     // Tailwind's classes, since jsdom has no layout to measure.
     const [list] = within(strip).getAllByRole("list")
     expect(list.className).toContain("grid")
-    expect(list.className).toContain("sm:grid-cols-3")
+    expect(list.className).toContain("sm:grid-cols-[repeat(auto-fit")
   })
 
   it("leaves the Featured Projects out when no Project is featured", () => {

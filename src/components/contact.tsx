@@ -3,6 +3,7 @@ import { revalidateLogic, useForm } from "@tanstack/react-form"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SectionHeading } from "@/components/section-heading"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { contactMessageSchema } from "@/contact/schema"
@@ -14,7 +15,7 @@ import type {
 import type { ContactResult } from "@/contact/submit"
 import type { Content, Locale } from "@/content"
 import { useTurnstile } from "@/lib/use-turnstile"
-import { textLinkClass } from "@/lib/utils"
+import { bandPadClass, cn, shellClass, textLinkClass } from "@/lib/utils"
 
 export type SendContactMessage = (input: ContactInput) => Promise<ContactResult>
 
@@ -49,22 +50,28 @@ export function Contact({
   const headingId = useId()
 
   return (
-    <section
-      id="contact"
-      aria-labelledby={headingId}
-      className="flex flex-col gap-6"
-    >
-      <h2 id={headingId} className="font-heading text-2xl font-semibold">
-        {contact.heading}
-      </h2>
-      <p className="max-w-prose text-muted-foreground">{contact.text}</p>
-      <ContactForm
-        contact={contact}
-        labels={labels}
-        locale={locale}
-        sendContactMessage={sendContactMessage}
-      />
-      <ContactLinks contact={contact} />
+    <section id="contact" aria-labelledby={headingId} className="band-sign">
+      <div
+        className={cn(
+          shellClass,
+          bandPadClass,
+          "grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20"
+        )}
+      >
+        <div className="flex flex-col gap-6 lg:pt-1">
+          <SectionHeading id={headingId}>{contact.heading}</SectionHeading>
+          <p className="max-w-[28ch] text-2xl leading-snug font-medium sm:text-3xl">
+            {contact.text}
+          </p>
+          <ContactLinks contact={contact} />
+        </div>
+        <ContactForm
+          contact={contact}
+          labels={labels}
+          locale={locale}
+          sendContactMessage={sendContactMessage}
+        />
+      </div>
     </section>
   )
 }
@@ -125,7 +132,7 @@ function ContactForm({
   return (
     <form
       noValidate
-      className="flex max-w-prose flex-col gap-4"
+      className="flex max-w-xl flex-col gap-5"
       onSubmit={(event) => {
         event.preventDefault()
         void form.handleSubmit()
@@ -139,7 +146,12 @@ function ContactForm({
             const Control = multiline ? Textarea : Input
             return (
               <div className="flex flex-col gap-2">
-                <Label htmlFor={id}>{labels[name]}</Label>
+                <Label
+                  htmlFor={id}
+                  className="font-heading text-lg font-semibold tracking-wider uppercase"
+                >
+                  {labels[name]}
+                </Label>
                 <Control
                   id={id}
                   name={name}
@@ -166,7 +178,12 @@ function ContactForm({
       <OutcomeMessage outcome={outcome} labels={labels} contact={contact} />
       <form.Subscribe selector={(state) => state.isSubmitting}>
         {(isSubmitting) => (
-          <Button type="submit" disabled={isSubmitting} className="self-start">
+          <Button
+            type="submit"
+            size="lg"
+            disabled={isSubmitting}
+            className="self-start"
+          >
             {isSubmitting ? labels.sending : labels.send}
           </Button>
         )}
@@ -219,7 +236,7 @@ function OutcomeMessage({
 
 function ContactLinks({ contact }: Readonly<{ contact: Content["contact"] }>) {
   return (
-    <ul className="flex flex-wrap gap-x-6 gap-y-2">
+    <ul className="flex flex-wrap gap-x-6 gap-y-2 text-lg font-semibold">
       <li>
         <a href={`mailto:${contact.email}`} className={textLinkClass}>
           {contact.email}
