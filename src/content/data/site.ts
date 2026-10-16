@@ -29,6 +29,10 @@ export const site = {
       en: "Frontend developer (React, TypeScript) who works effectively with AI agents.",
       cs: "Frontend vývojář (React, TypeScript), který efektivně pracuje s AI agenty.",
     },
+    lookingFor: {
+      en: "Looking for a full-time junior frontend job in Prague or remote.",
+      cs: "Hledám práci junior frontend vývojáře na plný úvazek, v Praze nebo na dálku.",
+    },
     contactCta: { en: "Contact me", cs: "Napište mi" },
   },
   about: {
@@ -41,8 +45,8 @@ export const site = {
   contact: {
     heading: { en: "Contact", cs: "Kontakt" },
     text: {
-      en: "Looking for a junior frontend developer, or want to talk about a project? Write to me.",
-      cs: "Hledáte junior frontend vývojáře, nebo chcete probrat projekt? Napište mi.",
+      en: "Looking for a junior frontend developer? Write to me.",
+      cs: "Hledáte junior frontend vývojáře? Napište mi.",
     },
     email: "standa@svoboda.page",
     linkedin: "https://www.linkedin.com/in/svoboda-stanislav",

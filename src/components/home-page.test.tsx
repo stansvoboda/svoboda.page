@@ -26,6 +26,7 @@ describe("home page", () => {
       screen.getByRole("heading", { level: 1, name: "Jane Doe" })
     ).toBeDefined()
     expect(screen.getByText("Staví věci.")).toBeDefined()
+    expect(screen.getByText("Hledám juniorní práci.")).toBeDefined()
     expect(
       screen.getByRole("link", { name: "Napište mi" }).getAttribute("href")
     ).toBe("#contact")

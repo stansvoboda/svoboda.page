@@ -111,6 +111,8 @@ export const contentSchema = z
     intro: z.strictObject({
       name: z.string().trim().min(1),
       positioning: localized,
+      // What job the owner is after and where, for recruiters who filter on it.
+      lookingFor: localized,
       contactCta: localized,
     }),
     about: z.strictObject({

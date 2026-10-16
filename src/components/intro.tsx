@@ -22,7 +22,12 @@ export function Intro({
 }>) {
   return (
     <section className="band-poster">
-      <div className={cn(shellClass, "flex flex-col gap-8 pt-12 pb-14 sm:pt-16 sm:pb-20")}>
+      <div
+        className={cn(
+          shellClass,
+          "flex flex-col gap-8 pt-12 pb-14 sm:pt-16 sm:pb-20"
+        )}
+      >
         <div className="flex flex-col gap-5">
           <h1
             style={step(0)}
@@ -36,8 +41,11 @@ export function Intro({
           >
             {intro.positioning}
           </p>
+          <p style={step(2)} className="rise max-w-[48ch] text-base sm:text-lg">
+            {intro.lookingFor}
+          </p>
         </div>
-        <div style={step(2)} className="rise flex flex-wrap gap-3">
+        <div style={step(3)} className="rise flex flex-wrap gap-3">
           <a href="#contact" className={buttonVariants({ size: "lg" })}>
             {intro.contactCta}
           </a>
@@ -67,7 +75,7 @@ function DepartureBoard({
         return (
           <li
             key={milestone.id}
-            style={step(i + 3)}
+            style={step(i + 4)}
             className={cn(
               "rise grid grid-cols-[4rem_1fr] items-baseline gap-x-4 border-b-2 border-foreground px-3 py-2.5 sm:grid-cols-[6rem_1fr_auto] sm:gap-x-6",
               latest && "bg-foreground text-background"

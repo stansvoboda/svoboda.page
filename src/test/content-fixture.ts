@@ -17,6 +17,10 @@ export function validContent() {
     intro: {
       name: "Jane Doe",
       positioning: { en: "Builds things.", cs: "Staví věci." },
+      lookingFor: {
+        en: "Looking for a junior job.",
+        cs: "Hledám juniorní práci.",
+      },
       contactCta: { en: "Contact me", cs: "Napište mi" },
     },
     about: {
