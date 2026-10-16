@@ -89,7 +89,9 @@ export function SiteNav({
         {home && (
           <nav
             ref={navRef}
-            className="min-w-0 flex-1 [scrollbar-width:none] overflow-x-auto lg:ml-6"
+            // The edges fade out, so a clipped stop reads as "more this way",
+            // not as a typo.
+            className="min-w-0 flex-1 [scrollbar-width:none] overflow-x-auto mask-x-from-90% lg:ml-6 lg:mask-none"
           >
             <ul className="flex w-max gap-1">
               {stations.map(({ id, label }) => (
